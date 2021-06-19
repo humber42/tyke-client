@@ -22,6 +22,12 @@
                             </v-flex>
                         </v-layout>
                         <v-layout row class="ma-1">
+                            <v-flex xs12>
+                                <v-file-input accept="image/*" label="Imagen" v-model="file">
+                                </v-file-input>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row class="ma-1">
                             <v-flex xs12 class="text-right">
                                 <v-btn color="success" class="mx-1" style="color: white!important;" type="submit"
                                        :disabled="!isFormNewValid||loading" :loading="loading">
@@ -81,7 +87,7 @@
             <v-row v-else>
                 <v-col cols="3" v-for="faculty in facultiesList" :key="faculty.id">
                     <v-card outlined hover shaped style="cursor: default!important;">
-                        <v-img src="http://localhost:9000/img/300" height="200"></v-img>
+                        <v-img :src="faculty.imagen" height="200"></v-img>
                         <v-card-title class="font-weight-regular"><v-icon class="apartment"/> {{faculty.facultad}}</v-card-title>
                         <v-card-subtitle style="color:black;">Siglas: {{faculty.siglas}}</v-card-subtitle>
                         <h4 class="font-weight-light ml-4" v-if="(!(faculty.carrerasById.length===0))">Carreras</h4>
@@ -90,12 +96,22 @@
                         </div>
                         <v-card-actions>
                             <v-flex class="text-right">
-                                <v-btn icon color="orange" @click="openDialogEdit(faculty)">
-                                    <v-icon>edit</v-icon>
-                                </v-btn>
-                                <v-btn icon color="red" @click="deleteDialogOpen(faculty)">
-                                    <v-icon>delete</v-icon>
-                                </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{on,attrs}">
+                                        <v-btn icon color="orange" @click="openDialogEdit(faculty)" v-bind="attrs" v-on="on">
+                                            <v-icon>edit</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Editar facultad</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{on,attrs}">
+                                        <v-btn icon color="red" @click="deleteDialogOpen(faculty)" v-bind="attrs" v-on="on">
+                                            <v-icon>delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Eliminar facultad</span>
+                                </v-tooltip>
                             </v-flex>
                         </v-card-actions>
                     </v-card>
@@ -111,7 +127,13 @@
     import axios from 'axios';
     import {mapGetters} from 'vuex'
 
-    import {URL_DELETE_FACULTY, URL_GET_ALL_FACULTIES, URL_SAVE_FACULTY, URL_UPDATE_FACULTY} from "../../urlResources";
+    import {
+        URL_DELETE_FACULTY,
+        URL_GET_ALL_FACULTIES,
+        URL_POST_IMAGE,
+        URL_SAVE_FACULTY,
+        URL_UPDATE_FACULTY
+    } from "../../urlResources";
     import Notification from "../utils/Notification";
 
     export default {
@@ -147,7 +169,8 @@
                 iconSnack:'',
                 snackInfo:'',
                 snackAlertType:'',
-                showSnackNotification:false
+                showSnackNotification:false,
+                file:null
             }
         },
         computed: {
@@ -180,40 +203,56 @@
             },
             saveFaculty() {
                 this.showSnackNotification = false;
+                console.log(this.file);
+                let formData = new FormData();
+                formData.append('file',this.file)
                 if (this.$refs.formNewFaculty.validate()) {
                     if (!this.editing) {
                         const token = localStorage.getItem('token');
-                        const payload = {
-                            facultad: this.facultadNameNew,
-                            siglas: this.facultadSiglasNew
-                        }
                         this.$store.commit('setLoading', true)
-                        axios.post(URL_SAVE_FACULTY, payload, {
+                        axios.post(URL_POST_IMAGE,formData,{
                             headers: {
                                 "Authorization": "Bearer " + token,
                                 "cache-control": "no-cache",
+                                "Content-Type": "multipart/form-data"
+                            },
+                        }).then(({data})=>{
+                            console.log(data)
+                            const dataUri = data.fileDownloadUri;
+                            const payload = {
+                                facultad: this.facultadNameNew,
+                                siglas: this.facultadSiglasNew,
+                                imagen: dataUri
                             }
-                        }).then(({data}) => {
-                            this.$store.commit('setLoading', false)
-                            console.log(data);
-                            this.facultiesList = this.getAllFaculties()
-                            this.dialogNewFaculty = false;
-                            this.facultadNameNew = '';
-                            this.facultadSiglasNew = '';
-                            this.editing = false;
-                            this.showSnackNotification = true;
-                            this.snackAlertType = "success";
-                            this.snackInfo = "Se ha insertedo una nueva facultad con exito";
-                            this.iconSnack = "info_outline"
-                            //this.$refs.formNewFaculty.reset();
-                        }).catch(err => {
-                            console.log(err)
-                            this.$store.commit('setLoading', false)
-                            this.showSnackNotification = true;
-                            this.snackAlertType = "error";
-                            this.snackInfo = "Ha ocurrido un error al insertar la facultad";
-                            this.iconSnack = "error_outline"
-                        })
+                            axios.post(URL_SAVE_FACULTY, payload, {
+                                headers: {
+                                    "Authorization": "Bearer " + token,
+                                    "cache-control": "no-cache",
+                                },
+                            }).then(({data}) => {
+                                this.$store.commit('setLoading', false)
+                                console.log(data);
+                                this.facultiesList = this.getAllFaculties()
+                                this.dialogNewFaculty = false;
+                                this.facultadNameNew = '';
+                                this.facultadSiglasNew = '';
+                                this.editing = false;
+                                this.showSnackNotification = true;
+                                this.snackAlertType = "success";
+                                this.snackInfo = "Se ha insertedo una nueva facultad con exito";
+                                this.iconSnack = "info_outline"
+                                //this.$refs.formNewFaculty.reset();
+                            }).catch(err => {
+                                console.log(err)
+                                this.$store.commit('setLoading', false)
+                                this.showSnackNotification = true;
+                                this.snackAlertType = "error";
+                                this.snackInfo = "Ha ocurrido un error al insertar la facultad";
+                                this.iconSnack = "error_outline"
+                            })
+                            }
+                        ).catch(err=>console.log(err,"Problema al subir file :("))
+
                     } else {
                         const token = localStorage.getItem('token');
                         const facultyToSave={
@@ -307,7 +346,8 @@
                         console.log(err)
                     })
 
-            }
+            },
+
         },
         created() {
             this.getAllFaculties();

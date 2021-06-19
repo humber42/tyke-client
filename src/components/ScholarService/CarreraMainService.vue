@@ -151,10 +151,23 @@
                         </template>
 
                         <template v-slot:item.actions="{item}">
-                            <v-icon class="mr-2" @click="editItem(item)" color="orange">
-                                edit
-                            </v-icon>
-                            <v-icon class="mr-2" @click="deleteItem(item)" color="red">delete</v-icon>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on,attrs}">
+                                    <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="editItem(item)"
+                                            color="orange">
+                                        edit
+                                    </v-icon>
+                                </template>
+                                <span>Editar carrera</span>
+                            </v-tooltip>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on,attrs}">
+                                    <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="deleteItem(item)" color="red">
+                                        delete
+                                    </v-icon>
+                                </template>
+                                <span>Eliminar carrera</span>
+                            </v-tooltip>
                         </template>
                     </v-data-table>
                 </v-card>
@@ -248,24 +261,31 @@
                 console.log(item)
             },
             saveCarrera() {
-                const payload = {
-                    facultad: this.selectFaculty,
-                    siglas: this.carreraSiglas,
-                    nombre: this.carreraName
-                }
-                const token = localStorage.getItem('token');
-                axios.post(URL_SAVE_CAREER, payload, {
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "cache-control": "no-cache",
+                if(this.$refs.insertFormAsignatura.validate()) {
+                    this.$store.commit('setLoading', true)
+                    const payload = {
+                        facultad: this.selectFaculty,
+                        siglas: this.carreraSiglas,
+                        nombre: this.carreraName
                     }
-                }).then(({data}) => {
-                    this.carrerasList.push(data);
-                    this.dialogInsertarCarrera = false;
-                    this.selectFaculty = [];
-                    this.carreraName = '';
-                    this.carreraSiglas = '';
-                }).catch(err => console.log(err))
+                    const token = localStorage.getItem('token');
+                    axios.post(URL_SAVE_CAREER, payload, {
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "cache-control": "no-cache",
+                        }
+                    }).then(({data}) => {
+                        this.$store.commit('setLoading', false)
+                        this.carrerasList.push(data);
+                        this.dialogInsertarCarrera = false;
+                        this.selectFaculty = [];
+                        this.carreraName = '';
+                        this.carreraSiglas = '';
+                    }).catch(err => {
+                        console.log(err)
+                        this.$store.commit('setLoading', false);
+                    })
+                }
 
             },
             editCarrera() {

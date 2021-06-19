@@ -29,7 +29,7 @@
                                 <v-container>
                                     <v-card-title>Añadir Tema</v-card-title>
                                     <v-form lazy-validation v-model="isFormInsertarValid"
-                                            ref="insertFormAsignatura" @submit.prevent="saveTema">
+                                            ref="insertFormTema" @submit.prevent="saveTema">
                                         <v-layout row class="ma-1">
                                             <v-flex xs12>
                                                 <v-combobox
@@ -56,7 +56,8 @@
                                                             :rules="temaDescriptionRules"
                                                             prepend-icon="text_fields" label="Descripcion"
                                                             aria-autocomplete="list" aria-required="true"
-                                                            counter="255"/>
+                                                            counter="255"
+                                                            maxlength="255"/>
                                             </v-flex>
                                         </v-layout>
 
@@ -83,7 +84,7 @@
                         <!--Dialog para eliminar-->
                         <v-dialog v-model="dialogEliminarTema" max-width="500px">
                             <v-card>
-                                <v-card-title>¿Desea eliminar esta carrera?</v-card-title>
+                                <v-card-title>¿Desea eliminar este tema?</v-card-title>
                                 <v-card-actions>
                                     <v-flex class="text-center">
                                         <v-btn color="success" class="mx-1" style="color: white!important;"
@@ -149,10 +150,23 @@
                 </template>
 
                 <template v-slot:item.actions="{item}">
-                    <v-icon class="mr-2" @click="editItem(item)" color="orange">
-                        edit
-                    </v-icon>
-                    <v-icon class="mr-2" @click="deleteItem(item)" color="red">delete</v-icon>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{on,attrs}">
+                            <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="editItem(item)"
+                                    color="orange">
+                                edit
+                            </v-icon>
+                        </template>
+                        <span>Editar tema</span>
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{on,attrs}">
+                            <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="deleteItem(item)" color="red">
+                                delete
+                            </v-icon>
+                        </template>
+                        <span>Eliminar tema</span>
+                    </v-tooltip>
                 </template>
             </v-data-table>
         </v-card>
@@ -250,30 +264,32 @@
                 })
             },
             saveTema() {
-                const token = localStorage.getItem('token');
-                const payload = {
-                    asignaturas: this.selectAsignaturas,
-                    description: this.newTemaDescription,
-                    nombre: this.newTemaNombre
+                if (this.$refs.insertFormTema.vaidate()) {
+                    const token = localStorage.getItem('token');
+                    const payload = {
+                        asignaturas: this.selectAsignaturas,
+                        description: this.newTemaDescription,
+                        nombre: this.newTemaNombre
+                    }
+                    this.$store.commit('setLoading', true)
+                    axios.post(URL_SAVE_TEMA, payload, {
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "cache-control": "no-cache",
+                        },
+                    }).then(({data}) => {
+                        this.temasList.push(data);
+                        this.$store.commit('setLoading', false);
+                        this.dialogInsertarTema = false;
+                        this.newTemaDescription = '';
+                        this.newTemaNombre = '';
+                        this.selectAsignaturas = [];
+                    }).catch(err => {
+                        console.log(err)
+                        this.$store.commit('setLoading', false)
+                    })
+                    console.log("Hola")
                 }
-                this.$store.commit('setLoading', true)
-                axios.post(URL_SAVE_TEMA, payload, {
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "cache-control": "no-cache",
-                    },
-                }).then(({data}) => {
-                    this.temasList.push(data);
-                    this.$store.commit('setLoading', false);
-                    this.dialogInsertarTema = false;
-                    this.newTemaDescription = '';
-                    this.newTemaNombre = '';
-                    this.selectAsignaturas = [];
-                }).catch(err => {
-                    console.log(err)
-                    this.$store.commit('setLoading', false)
-                })
-                console.log("Hola")
             },
             updateTema() {
                 const token = localStorage.getItem('token')
@@ -281,14 +297,14 @@
                     asignaturas: this.asignaturaSelectsEdit,
                     description: this.descripcionTemaEdit,
                     nombre: this.nombreTemaEdit,
-                    id:this.temaToEdit.id
+                    id: this.temaToEdit.id
                 }
-                axios.post(URL_UPDATE_TEMA,payload,{
+                axios.post(URL_UPDATE_TEMA, payload, {
                     headers: {
                         "Authorization": "Bearer " + token,
                         "cache-control": "no-cache",
                     },
-                }).then(({data})=>{
+                }).then(({data}) => {
                     this.getAllTemas();
                     console.log(data);
                     this.nombreTemaEdit = '';
@@ -296,7 +312,7 @@
                     this.asignaturaSelectsEdit = [];
                     this.temaToEdit = null;
                     this.dialogEditarTema = false;
-                }).catch((err)=>{
+                }).catch((err) => {
                     console.log(err);
                 })
 
@@ -327,9 +343,9 @@
                 this.temaToEdit = item;
                 this.nombreTemaEdit = item.nombre
                 this.descripcionTemaEdit = item.description
-                let arrayAsignaturas=[];
+                let arrayAsignaturas = [];
                 let i = 0;
-                while(i<item.asignaturaTemasById.length){
+                while (i < item.asignaturaTemasById.length) {
                     console.log(item.asignaturaTemasById[i].asignaturaByIdAsignatura.nombre)
                     arrayAsignaturas.push(item.asignaturaTemasById[i].asignaturaByIdAsignatura.nombre)
                     i++;

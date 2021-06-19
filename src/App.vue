@@ -31,7 +31,7 @@
 
       <v-app-bar app color="primary" dark>
         <v-toolbar-title class="hidden-xs-only">
-          <router-link to="/" tag="button" style="cursor: pointer">TykePlattform</router-link>
+          <router-link to="/" tag="button" style="cursor: pointer">TykePlatform</router-link>
 
         </v-toolbar-title>
         <!--HorizontalNavbarIcons-->
@@ -77,7 +77,8 @@ export default {
                  {title: "Facultad",icon: "apartment",link:"/facultad-service"},
                  {title: "Carrera",icon: "school",link: "/carrera-service"},
                  {title: "Curso",icon: "date_range",link: "/course-service"},
-                 {title: "Grupo",icon: "people",link:"/group-service"}
+                 {title: "Grupo",icon: "people",link:"/group-service"},
+                 {title: "Profesores", icon:"engineering", link: "/professors"}
                 ]
          },
          {
@@ -90,7 +91,7 @@ export default {
          },
          {
              title: "Seguridad",
-             icon: "shield",
+             icon: "admin_panel_settings",
              items:[
                  {title:"Usuarios",icon:"face",link:"/user-service"},
                  {title:"Roles", icon:"add_moderator",link:"/roles-service"}

@@ -103,9 +103,15 @@
                             </v-toolbar>
                         </template>
                         <template v-slot:item.actions="{item}">
-                            <v-icon class="mr-2" @click="editItem(item)" color="orange">
-                                edit
-                            </v-icon>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on,attrs}">
+                                    <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="editItem(item)"
+                                            color="orange">
+                                        edit
+                                    </v-icon>
+                                </template>
+                                <span>Editar curso</span>
+                            </v-tooltip>
                         </template>
                     </v-data-table>
                 </v-card>

@@ -10,6 +10,8 @@ import CarreraMainService from "../components/ScholarService/CarreraMainService"
 import CursoMainService from "../components/ScholarService/CursoMainService";
 import TemaMainService from "../components/ScholarService/TemaMainService";
 import GrupoMainService from "../components/ScholarService/GrupoMainService";
+import InsertarGrupo from "../components/ScholarService/SecretariaManagement/InsertarGrupo";
+import ProfesoresManagement from "../components/ScholarService/SecretariaManagement/ProfesoresManagement";
 
 Vue.use(VueRouter);
 
@@ -64,6 +66,16 @@ const routes = [
     path: "/group-service",
     name:"GrupoMainService",
     component: GrupoMainService
+  },
+  {
+    path: "/new-group-service",
+    name:"NewGroupService",
+    component: InsertarGrupo
+  },
+  {
+    path: "/professors",
+    name:"ProfesoresManagement",
+    component: ProfesoresManagement
   }
 
 ];

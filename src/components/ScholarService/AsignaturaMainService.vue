@@ -47,6 +47,17 @@
                                                     </v-flex>
                                                 </v-layout>
                                                 <v-layout row class="ma-1">
+                                                    <v-flex xs12>
+                                                        <v-combobox
+                                                                v-model="semestreSelected"
+                                                                :items="semestresList"
+                                                                label="Semestre"
+                                                                prepend-icon="timer"
+                                                                :rules="semestreRules"
+                                                        ></v-combobox>
+                                                    </v-flex>
+                                                </v-layout>
+                                                <v-layout row class="ma-1">
                                                     <v-flex xs12 class="text-right">
                                                         <v-btn type="submit" class="mx-1" color="primary"
                                                                style="color: white!important;"
@@ -104,13 +115,124 @@
                                     </v-card>
 
                                 </v-dialog>
+                                <!--Asignar asignatura a carreras-->
+                                <v-dialog v-model="dialogAddCareers" persistent max-width="800px">
+                                    <v-card>
+                                        <v-container>
+                                            <v-card-title>Asignar {{asignaturaToAddCareer.nombre}} a carreras</v-card-title>
+                                            <v-row>
+                                                <!--Estdudiantes disponibles-->
+                                                <v-col cols="5">
+                                                    <v-card outlined elevation="8" rounded>
+                                                        <div class="text-center pa-3">
+                                                            <h3 class="font-weight-regular">Carreras disponibles</h3>
+                                                        </div>
+                                                        <v-divider/>
+                                                        <div v-if="loading" class="text-center mt-3 mb-3">
+                                                            <v-progress-circular
+                                                                    :size="50"
+                                                                    color="blue"
+                                                                    indeterminate
+                                                            ></v-progress-circular>
+                                                        </div>
+
+                                                        <v-list-item-group v-else v-model="careerSelected" color="indigo">
+                                                            <v-list-item v-for="career in careersList"
+                                                                         :key="career.id" @click="someCareerSelected=true">
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title>- {{career.nombre}}
+                                                                    </v-list-item-title>
+                                                                </v-list-item-content>
+                                                            </v-list-item>
+                                                        </v-list-item-group>
+                                                    </v-card>
+                                                </v-col>
+                                                <!--Botones-->
+                                                <v-col cols="2" >
+                                                    <div>
+                                                        <v-sheet class="align-center ml-8">
+                                                            <v-flex class="text-center">
+                                                                <v-layout row class="ma-1">
+                                                                    <v-btn icon outlined @click="addAllStudentToAssignGroup">
+                                                                        <v-icon class="last_page"/>
+                                                                    </v-btn>
+                                                                </v-layout>
+                                                                <v-layout row class="ma-1">
+                                                                    <v-btn icon :disabled="!someCareerSelected" outlined
+                                                                           @click="addStudentToAssignGroup">
+                                                                        <v-icon class="navigate_next"/>
+                                                                    </v-btn>
+                                                                </v-layout>
+                                                                <v-layout row class="ma-1">
+                                                                    <v-btn icon outlined :disabled="!someCareerSelectedRigth"
+                                                                           @click="removeStudentFromGroup">
+                                                                        <v-icon class="navigate_before"/>
+                                                                    </v-btn>
+                                                                </v-layout>
+                                                                <v-layout row class="ma-1">
+                                                                    <v-btn icon outlined @click="removeAllStudenFromGroup">
+                                                                        <v-icon class="first_page"/>
+                                                                    </v-btn>
+                                                                </v-layout>
+                                                            </v-flex>
+                                                        </v-sheet>
+                                                    </div>
+                                                </v-col>
+                                                <!--Estdudiantes annadidos-->
+                                                <v-col cols="5">
+                                                    <v-card outlined elevation="8" rounded>
+                                                        <div class="text-center pa-3">
+                                                            <h3 class="font-weight-regular">Carreras asignadas</h3>
+                                                        </div>
+                                                        <v-divider/>
+
+                                                        <v-list-item-group v-model="careerToAsignSelected"
+                                                                           color="indigo">
+                                                            <v-list-item v-for="item in careersToAsign" :key="item.id"
+                                                                         @click="someCareerSelectedRigth=true">
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title>- {{item.nombre}}
+                                                                    </v-list-item-title>
+                                                                </v-list-item-content>
+                                                            </v-list-item>
+                                                        </v-list-item-group>
+                                                    </v-card>
+                                                </v-col>
+                                            </v-row>
+                                            <v-card-actions>
+                                                <v-layout row class="ma-1">
+                                                    <v-flex xs12 class="text-right">
+                                                        <v-btn color="green" style="color: white!important;" class="mx-1" @click="assignSignatureToCareer">Asignar</v-btn>
+                                                        <v-btn class="mx-1" @click="cancelarDialogAssignSignatures" color="red" style="color: white!important;">Cancelar</v-btn>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-card-actions>
+                                        </v-container>
+                                    </v-card>
+                                </v-dialog>
+
                             </v-toolbar>
                         </template>
 
                         <template v-slot:item.actions="{item}">
-                            <v-icon class="mr-2" @click="editItem(item)" color="orange">
-                                edit
-                            </v-icon>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on,attrs}">
+                                    <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="editItem(item)"
+                                            color="orange">
+                                        edit
+                                    </v-icon>
+                                </template>
+                                <span>Editar asignatura</span>
+                            </v-tooltip>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on,attrs}">
+                                    <v-icon v-bind="attrs" v-on="on" @click="addToCareer(item)" color="accent">
+                                        assignment
+                                    </v-icon>
+                                </template>
+                                <span>Añadir a carrera</span>
+                            </v-tooltip>
+
                         </template>
                     </v-data-table>
                 </v-card>
@@ -122,7 +244,13 @@
 <script>
     import {mapGetters} from 'vuex';
     import axios from 'axios';
-    import {URL_FETCH_ALL_ASIGNATURAS, URL_SAVE_ASIGNATURA, URL_UPDATE_ASiGNATURA} from "../../urlResources";
+    import {
+        URL_ASSIGN_SIGNATURES_TO_CAREERS,
+        URL_FETCH_ALL_ASIGNATURAS, URL_GET_ALL_CAREERS,
+        URL_GET_SEMESTERS,
+        URL_SAVE_ASIGNATURA,
+        URL_UPDATE_ASiGNATURA
+    } from "../../urlResources";
     import Notification from "../utils/Notification";
 
     export default {
@@ -155,6 +283,19 @@
                 asignaturaToEdit: {},
                 stateAsigEdit:false,
                 nameAsigEdit:'',
+                semestresList:[],
+                semestreSelected:'',
+                semestreRules:[
+                    semestre=>!!semestre||"El semestre es requerido"
+                ],
+                asignaturaToAddCareer:'',
+                careersList:[],
+                careersToAsign:[],
+                careerSelected:0,
+                careerToAsignSelected:0,
+                someCareerSelected: false,
+                someCareerSelectedRigth:false,
+                dialogAddCareers:false
             }
         },
         methods: {
@@ -185,6 +326,7 @@
                     this.snackInfo = "Se cargaron los datos de las asignaturas con exito";
                     this.snackAlertType = 'success';
                     this.search ='';
+                    console.log(data)
                 }).catch(err => {
                     console.log(err);
                     this.$store.commit('setLoadingTable', false);
@@ -207,7 +349,8 @@
                 const token = localStorage.getItem('token');
                 const payload = {
                     activo: true,
-                    nombre: this.asignaturaNameNew
+                    nombre: this.asignaturaNameNew,
+                    semestre: this.semestreSelected
                 };
                 axios.post(URL_SAVE_ASIGNATURA, payload, {
                     headers: {
@@ -261,7 +404,109 @@
                     this.snackInfo = "La asignatura no fue modificada";
                     this.snackAlertType = 'error';
                 })
-
+            },
+            getAllCareers(){
+                const token = localStorage.getItem('token');
+                this.$store.commit('setLoading',true)
+                axios.get(URL_GET_ALL_CAREERS,{
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "cache-control": "no-cache",
+                    }
+                }).then(({data})=>{
+                    this.$store.commit('setLoading',false)
+                    this.careersList=data;
+                }).catch(err=>{
+                    console.log(err);
+                    this.$store.commit('setLoading',false)
+                })
+            },
+            getAllSemestres(){
+                const token = localStorage.getItem('token');
+                axios.get(URL_GET_SEMESTERS,{
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "cache-control": "no-cache",
+                    }
+                }).then(({data})=>{
+                    let i =0;
+                    while(i<data.length){
+                        this.semestresList.push(data[i].semestre);
+                        i++;
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                })
+            },
+            addToCareer(item){
+                console.log(item);
+                this.asignaturaToAddCareer=item;
+                this.getAllCareers();
+                this.dialogAddCareers=true;
+            },
+            /**
+             * Methods to rigth function
+             */
+            addStudentToAssignGroup() {
+                let student = this.careersList.splice(this.careerSelected, 1)
+                this.careersToAsign.push(student[0]);
+                console.log(this.careersToAsign);
+                this.careerSelected = [];
+                this.someCareerSelected = false;
+            },
+            addAllStudentToAssignGroup() {
+                this.careersToAsign = this.careersList;
+                this.careersList = [];
+                this.someCareerSelected = false;
+                this.someCareerSelectedRigth = false;
+            },
+            removeStudentFromGroup() {
+                console.log(this.careerToAsignSelected)
+                let student = this.careersToAsign.splice(this.careerToAsignSelected, 1);
+                this.careersList.push(student[0]);
+                console.log(this.careersList);
+                this.careerToAsignSelected = [];
+                this.someCareerSelectedRigth = false;
+            },
+            removeAllStudenFromGroup() {
+                while (this.careersToAsign.length > 0) {
+                    let student2 = this.careersToAsign.pop()
+                    this.careersList.push(student2);
+                }
+                this.careersToAsign = [];
+                this.someCareerSelectedRigth = false;
+            },
+            cancelarDialogAssignSignatures(){
+                this.dialogAddCareers=false;
+                this.careersList=[];
+                this.careersToAsign=[];
+                this.someCareerSelected=false;
+                this.someCareerSelectedRigth=false;
+                this.careerSelected=null;
+                this.careerToAsignSelected=null;
+            },
+            assignSignatureToCareer(){
+                let i = 0;
+                const token =  localStorage.getItem('token');
+                while(i<this.careersToAsign.length){
+                    let payload ={
+                        idCareer: this.careersToAsign[i].id,
+                        idSignature: this.asignaturaToAddCareer.id
+                    }
+                    axios.post(URL_ASSIGN_SIGNATURES_TO_CAREERS,payload,{
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "cache-control": "no-cache",
+                        }
+                    }).then(({data})=>{
+                        console.log(data)
+                    }).catch(err=>{
+                        console.log(err)
+                        i=this.careersToAsign.length
+                    })
+                    i++;
+                }
+                this.dialogAddCareers = false;
             }
         },
         computed: {
@@ -269,6 +514,8 @@
         },
         created() {
             this.cargarDatosAsignaturas();
+            this.getAllSemestres();
+            //this.getAllCareers();
         }
     }
 </script>

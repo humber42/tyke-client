@@ -26,6 +26,7 @@
                                             <h2 class="font-weight-thin">Bienvenido de nuevo</h2>
                                         </v-flex>
                                         <v-container>
+                                            <v-alert type="danger" v-model="alertRegister" dismissible transition="scale-transition">{{error}}</v-alert>
                                             <v-form v-model="isFormValid" lazy-validation ref="formLogin" @submit.prevent="handleSigninUser">
                                                 <v-layout row class="ma-1">
                                                     <v-flex xs12>
@@ -93,7 +94,7 @@
                                                         v-model="selectedFaculty"
                                                         :items="facultyList"
                                                         label="Facultad"
-                                                        prepend-icon="chrome_reader_mode"
+                                                        prepend-icon="apartment"
                                                         :rules="facultyRules"
                                                 ></v-combobox>
                                             </v-flex>
@@ -164,7 +165,7 @@
                 passwordRules: [
                     (password) => !!password || "La contraseña es requerida",
                     (password) =>
-                        password.length > 6 ||
+                        password.length > 5 ||
                         "La contraseña debe tener al menos 6 caracteres",
                 ],
                 fullnameRules:[

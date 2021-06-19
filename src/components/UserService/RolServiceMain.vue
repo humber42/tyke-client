@@ -76,9 +76,15 @@
                     <v-card-text>{{rol.description}}</v-card-text>
                     <v-card-actions>
                         <v-flex class="text-right">
-                            <v-btn icon @click="deleteRol(rol)">
-                                <v-icon color="red">delete</v-icon>
-                            </v-btn>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on,attrs}">
+                                    <v-btn icon @click="deleteRol(rol)" v-bind="attrs" v-on="on">
+                                        <v-icon color="red">delete</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Eliminar rol</span>
+                            </v-tooltip>
+
                         </v-flex>
                     </v-card-actions>
                 </v-card>
