@@ -62,3 +62,17 @@ export const URL_GET_GRUPOS_BY_CAREER="http://192.168.137.1:9092/schoolar-manage
 export const URL_TO_ASSIGN_PROFESORS_TO_SIGNATURES="http://192.168.137.1:9092/schoolar-management-service/api/asignatura-profesor-grupo/list/save";
 export const URL_POST_IMAGE="http://192.168.137.1:9092/schoolar-management-service/uploadFile";
 
+//Question Service
+export const URL_FETCH_ALL_TIPO_PREGUNTA="http://192.168.137.1:9092/question-service/api/tipo-pregunta";
+export const URL_SAVE_TIPO_PREGUNTA="http://192.168.137.1:9092/question-service/api/tipo-pregunta/save"
+export const URL_DELETE_TIPO_PREGUNTA="http://192.168.137.1:9092/question-service/api/tipo-pregunta/delete/id";
+
+export const URL_FETCH_ALL_TIPO_PISTA="http://192.168.137.1:9092/question-service/api/tipo-pista";
+export const URL_SAVE_TIPO_PISTA="http://192.168.137.1:9092/question-service/api/tipo-pista/save";
+export const URL_DELETE_TIPO_PISTA="http://192.168.137.1:9092/question-service/api/tipo-pista/delete/id";
+export const URL_EDIT_TIPO_PISTA="http://192.168.137.1:9092/question-service/api/tipo-pista/update";
+
+export const URL_FETCH_ALL_QUESTIONS="http://192.168.137.1:9092/question-service/api/pregunta";
+export const URL_SAVE_QUESTION="http://192.168.137.1:9092/question-service/api/pregunta/save/complete";
+export const URL_DELETE_QUESTION="http://192.168.137.1:9092/question-service/api/pregunta/delete/id";
+

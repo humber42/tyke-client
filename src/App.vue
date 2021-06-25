@@ -86,7 +86,8 @@ export default {
              icon: "sticky_note_2",
             items: [
                 {title:"Pregunta",icon:"wysiwyg",link:"/question-service"},
-                {title: "Ayuda",icon:"help",link: "/help-service"}
+                {title: "Tipo de pista",icon: "search",link: "/clue-type-service"},
+                {title: "Tipo de pregunta",icon:"fact_check", link:"/question-type-service" },
             ]
          },
          {

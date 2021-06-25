@@ -748,14 +748,14 @@
                             "cache-control": "no-cache",
                         }
                     }).then(({data}) => {
-                        this.$store.commit('setLoading', true);
+                        this.$store.commit('setLoading', false);
                         this.dialogAsignSignatureAndGroups = false
                         console.log(data);
                     }).catch(err => {
                         this.alertShow = true;
                         this.infoAlert = err
                         console.log(err)
-                        this.$store.commit('setLoading', true);
+                        this.$store.commit('setLoading', false);
                     })
                 }
             },

@@ -281,6 +281,7 @@
                         this.selectFaculty = [];
                         this.carreraName = '';
                         this.carreraSiglas = '';
+                        this.$refs.insertFormAsignatura.reset();
                     }).catch(err => {
                         console.log(err)
                         this.$store.commit('setLoading', false);
@@ -355,6 +356,7 @@
                 this.nameEditCareer = '';
                 this.siglasEditCareer = '';
                 this.facultadEditCareer = ''
+                this.$refs.insertFormAsignatura.reset();
             }
 
         },

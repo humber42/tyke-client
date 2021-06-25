@@ -12,6 +12,11 @@ import TemaMainService from "../components/ScholarService/TemaMainService";
 import GrupoMainService from "../components/ScholarService/GrupoMainService";
 import InsertarGrupo from "../components/ScholarService/SecretariaManagement/InsertarGrupo";
 import ProfesoresManagement from "../components/ScholarService/SecretariaManagement/ProfesoresManagement";
+import ClueTypeService from "../components/QuestionService/ClueTypeService";
+import QuestionNewService from "../components/QuestionService/QuestionNewService";
+import QuestionMainService from "../components/QuestionService/QuestionMainService";
+import QuestionTypeService from "../components/QuestionService/QuestionTypeService";
+import BonificationService from "../components/QuestionService/BonificationService";
 
 Vue.use(VueRouter);
 
@@ -76,6 +81,31 @@ const routes = [
     path: "/professors",
     name:"ProfesoresManagement",
     component: ProfesoresManagement
+  },
+  {
+    path: "/clue-type-service",
+    name: "ClueTypeService",
+    component: ClueTypeService
+  },
+  {
+    path: "/question-new-service",
+    name: "QuestionNewService",
+    component: QuestionNewService
+  },
+  {
+    path: "/question-service",
+    name: "QuestionMainService",
+    component: QuestionMainService
+  },
+  {
+    path: "/question-type-service",
+    name: "QuestionTypeService",
+    component: QuestionTypeService
+  },
+  {
+    path: "/bonification-service",
+    name: "BonificationService",
+    component: BonificationService
   }
 
 ];

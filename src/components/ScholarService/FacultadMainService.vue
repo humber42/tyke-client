@@ -87,18 +87,28 @@
             <v-row v-else>
                 <v-col cols="3" v-for="faculty in facultiesList" :key="faculty.id">
                     <v-card outlined hover shaped style="cursor: default!important;">
-                        <v-img :src="faculty.imagen" height="200"></v-img>
-                        <v-card-title class="font-weight-regular"><v-icon class="apartment"/> {{faculty.facultad}}</v-card-title>
-                        <v-card-subtitle style="color:black;">Siglas: {{faculty.siglas}}</v-card-subtitle>
-                        <h4 class="font-weight-light ml-4" v-if="(!(faculty.carrerasById.length===0))">Carreras</h4>
-                        <div v-for="career in faculty.carrerasById" :key="career.id" class="ml-4">
-                                    <h4 ><v-icon class="school"/> {{career.nombre}}</h4>
-                        </div>
+                        <v-img :src="faculty.imagen" aspect-ratio="1.2" height="200" contain></v-img>
+                        <v-divider/>
+                        <div style="background-color: #8dcf9c">
+                            <v-card-title class="font-weight-regular">
+                                <v-icon class="apartment"/>
+                                {{faculty.facultad}}
+                            </v-card-title>
+                            <v-card-subtitle style="color:black;">Siglas: {{faculty.siglas}}</v-card-subtitle>
+                            <h4 class="font-weight-light ml-4" v-if="(!(faculty.carrerasById.length===0))">Carreras</h4>
+                            <div v-for="career in faculty.carrerasById" :key="career.id" class="ml-4">
+                                <h4>
+                                    <v-icon class="school"/>
+                                    {{career.nombre}}
+                                </h4>
+                            </div>
+
                         <v-card-actions>
                             <v-flex class="text-right">
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{on,attrs}">
-                                        <v-btn icon color="orange" @click="openDialogEdit(faculty)" v-bind="attrs" v-on="on">
+                                        <v-btn icon color="orange" @click="openDialogEdit(faculty)" v-bind="attrs"
+                                               v-on="on">
                                             <v-icon>edit</v-icon>
                                         </v-btn>
                                     </template>
@@ -106,7 +116,8 @@
                                 </v-tooltip>
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{on,attrs}">
-                                        <v-btn icon color="red" @click="deleteDialogOpen(faculty)" v-bind="attrs" v-on="on">
+                                        <v-btn icon color="red" @click="deleteDialogOpen(faculty)" v-bind="attrs"
+                                               v-on="on">
                                             <v-icon>delete</v-icon>
                                         </v-btn>
                                     </template>
@@ -114,6 +125,7 @@
                                 </v-tooltip>
                             </v-flex>
                         </v-card-actions>
+                        </div>
                     </v-card>
                 </v-col>
             </v-row>
@@ -164,13 +176,13 @@
                 facultyToEdit: null,
                 editing: false,
                 textCardSaveOrEdit: "Nueva facultad",
-                facultyToDelete:null,
-                dialogDelete:false,
-                iconSnack:'',
-                snackInfo:'',
-                snackAlertType:'',
-                showSnackNotification:false,
-                file:null
+                facultyToDelete: null,
+                dialogDelete: false,
+                iconSnack: '',
+                snackInfo: '',
+                snackAlertType: '',
+                showSnackNotification: false,
+                file: null
             }
         },
         computed: {
@@ -205,61 +217,62 @@
                 this.showSnackNotification = false;
                 console.log(this.file);
                 let formData = new FormData();
-                formData.append('file',this.file)
+                formData.append('file', this.file)
                 if (this.$refs.formNewFaculty.validate()) {
                     if (!this.editing) {
                         const token = localStorage.getItem('token');
                         this.$store.commit('setLoading', true)
-                        axios.post(URL_POST_IMAGE,formData,{
+                        axios.post(URL_POST_IMAGE, formData, {
                             headers: {
                                 "Authorization": "Bearer " + token,
                                 "cache-control": "no-cache",
                                 "Content-Type": "multipart/form-data"
                             },
-                        }).then(({data})=>{
-                            console.log(data)
-                            const dataUri = data.fileDownloadUri;
-                            const payload = {
-                                facultad: this.facultadNameNew,
-                                siglas: this.facultadSiglasNew,
-                                imagen: dataUri
+                        }).then(({data}) => {
+                                console.log(data)
+                                const dataUri = data.fileDownloadUri;
+                                const payload = {
+                                    facultad: this.facultadNameNew,
+                                    siglas: this.facultadSiglasNew,
+                                    imagen: dataUri
+                                }
+                                axios.post(URL_SAVE_FACULTY, payload, {
+                                    headers: {
+                                        "Authorization": "Bearer " + token,
+                                        "cache-control": "no-cache",
+                                    },
+                                }).then(({data}) => {
+                                    this.$store.commit('setLoading', false)
+                                    console.log(data);
+                                    this.facultiesList = this.getAllFaculties()
+                                    this.dialogNewFaculty = false;
+                                    this.facultadNameNew = '';
+                                    this.facultadSiglasNew = '';
+                                    this.editing = false;
+                                    this.showSnackNotification = true;
+                                    this.snackAlertType = "success";
+                                    this.snackInfo = "Se ha insertedo una nueva facultad con exito";
+                                    this.iconSnack = "info_outline"
+                                    //this.$refs.formNewFaculty.reset();
+                                    this.$refs.formNewFaculty.reset();
+                                }).catch(err => {
+                                    console.log(err)
+                                    this.$store.commit('setLoading', false)
+                                    this.showSnackNotification = true;
+                                    this.snackAlertType = "error";
+                                    this.snackInfo = "Ha ocurrido un error al insertar la facultad";
+                                    this.iconSnack = "error_outline"
+                                })
                             }
-                            axios.post(URL_SAVE_FACULTY, payload, {
-                                headers: {
-                                    "Authorization": "Bearer " + token,
-                                    "cache-control": "no-cache",
-                                },
-                            }).then(({data}) => {
-                                this.$store.commit('setLoading', false)
-                                console.log(data);
-                                this.facultiesList = this.getAllFaculties()
-                                this.dialogNewFaculty = false;
-                                this.facultadNameNew = '';
-                                this.facultadSiglasNew = '';
-                                this.editing = false;
-                                this.showSnackNotification = true;
-                                this.snackAlertType = "success";
-                                this.snackInfo = "Se ha insertedo una nueva facultad con exito";
-                                this.iconSnack = "info_outline"
-                                //this.$refs.formNewFaculty.reset();
-                            }).catch(err => {
-                                console.log(err)
-                                this.$store.commit('setLoading', false)
-                                this.showSnackNotification = true;
-                                this.snackAlertType = "error";
-                                this.snackInfo = "Ha ocurrido un error al insertar la facultad";
-                                this.iconSnack = "error_outline"
-                            })
-                            }
-                        ).catch(err=>console.log(err,"Problema al subir file :("))
+                        ).catch(err => console.log(err, "Problema al subir file :("))
 
                     } else {
                         const token = localStorage.getItem('token');
-                        const facultyToSave={
-                            id:this.facultyToEdit.id,
+                        const facultyToSave = {
+                            id: this.facultyToEdit.id,
                             facultad: this.facultadNameNew,
-                            siglas:this.facultadSiglasNew,
-                            carrerasById:null
+                            siglas: this.facultadSiglasNew,
+                            carrerasById: null
                         }
                         this.$store.commit('setLoading', true)
                         console.log(facultyToSave)
@@ -311,34 +324,35 @@
                 this.facultadSiglasNew = '';
                 this.facultyToEdit = null;
                 this.dialogEditFaculty = false;
+                this.$refs.formNewFaculty.reset();
             },
-            deleteDialogOpen(item){
+            deleteDialogOpen(item) {
                 this.showSnackNotification = false;
                 this.facultyToDelete = item;
-                this.dialogDelete=true;
+                this.dialogDelete = true;
             },
-            deleteFaculty(){
+            deleteFaculty() {
                 this.showSnackNotification = false;
                 const token = localStorage.getItem('token')
-                axios.delete(URL_DELETE_FACULTY,{
+                axios.delete(URL_DELETE_FACULTY, {
                     headers: {
                         "Authorization": "Bearer " + token,
                         "cache-control": "no-cache",
                     },
-                    params:{
-                        id:this.facultyToDelete.id
+                    params: {
+                        id: this.facultyToDelete.id
                     }
-                }).then(({data})=>{
+                }).then(({data}) => {
                     //const pos =this.facultiesList.indexOf(data);
                     console.log(data)
                     this.facultiesList = this.getAllFaculties()
-                    this.dialogDelete=false;
+                    this.dialogDelete = false;
                     this.showSnackNotification = true;
                     this.snackAlertType = "success";
                     this.snackInfo = "Se ha eliminado la facultad con exito";
                     this.iconSnack = "info_outline"
                 })
-                    .catch(err=>{
+                    .catch(err => {
                         this.showSnackNotification = true;
                         this.snackAlertType = "error";
                         this.snackInfo = "Ha ocurrido un error al eliminar la facultad";
