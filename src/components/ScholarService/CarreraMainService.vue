@@ -242,6 +242,9 @@
                 }).catch(err => {
                     console.log(err)
                     this.$store.commit('setLoadingTable', false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getFacultyName(item) {
@@ -285,6 +288,9 @@
                     }).catch(err => {
                         console.log(err)
                         this.$store.commit('setLoading', false);
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
                 }
 
@@ -308,6 +314,9 @@
                     console.log(data)
                 }).catch((err)=>{
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             deleteCarrera() {
@@ -325,7 +334,12 @@
                     this.carrerasList = this.getAllCareers();
                     this.dialogDeleteCarrera = false;
                     this.carreraToDelete = null;
-                }).catch(err => console.log(err))
+                }).catch(err => {
+                    console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                })
             },
             getFacultyList() {
                 const token = localStorage.getItem('token');
@@ -343,6 +357,9 @@
                     }
                 }).catch(err => {
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             cancelar() {

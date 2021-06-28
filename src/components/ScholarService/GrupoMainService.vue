@@ -106,6 +106,9 @@
                 }).catch((err)=>{
                     this.$store.commit('setLoadingTable', false);
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             annadirGrupo(){
@@ -131,6 +134,9 @@
                 }).catch(err=>{
                     this.$store.commit('setLoading',false);
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
 
             },

@@ -26,7 +26,9 @@
                                             <h2 class="font-weight-thin">Bienvenido de nuevo</h2>
                                         </v-flex>
                                         <v-container>
-                                            <v-alert type="danger" v-model="alertRegister" dismissible transition="scale-transition">{{error}}</v-alert>
+                                            <v-alert v-if="error!==null" v-model="alertShow"  type="error" dismissible transition="scale-transition">
+                                                {{error.response.status===504?"Espere 10 segundos se estan demorando los servidores":"Las credenciales son incorrectas"}}
+                                            </v-alert>
                                             <v-form v-model="isFormValid" lazy-validation ref="formLogin" @submit.prevent="handleSigninUser">
                                                 <v-layout row class="ma-1">
                                                     <v-flex xs12>
@@ -156,6 +158,7 @@
                 alertRegister: false,
                 typeAlert:'',
                 infoAlert:'',
+                alertShow:false,
                 usernameRules: [
                     (username) => !!username || "El nombre de usuario es requerido",
                     (username) =>
@@ -242,9 +245,15 @@
         watch: {
             user(value) {
                 if (value) {
-                    this.$router.push("/");
+                    this.$router.push("/home");
                 }
             },
+            error(value){
+                if(value){
+                    this.alertShow=true;
+                    this.$refs.formLogin.reset();
+                }
+            }
         },
         created() {
             this.getAllFacultys();

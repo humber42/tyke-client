@@ -335,7 +335,12 @@
                         this.facultadesList.push(data[i].facultad);
                         i++;
                     }
-                }).catch(err => console.log(err))
+                }).catch(err => {
+                    console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                })
             },
             getCourses() {
                 const token = localStorage.getItem('token');
@@ -353,7 +358,12 @@
                         i++;
                     }
                     console.log(this.courseList);
-                }).catch(err => console.log(err));
+                }).catch(err => {
+                    console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                });
             },
             getCareersByFacultyName(){
                 const token = localStorage.getItem('token')
@@ -375,6 +385,9 @@
                     }
                 }).catch(err=>{
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             aumentarValorSpinner() {
@@ -423,6 +436,9 @@
                 }).catch((err) => {
                     console.log(err)
                     this.$store.commit('setLoading', false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             addStudentToAssignGroup() {
@@ -490,6 +506,9 @@
                 }).catch((err)=> {
                     console.log(err);
                     this.$store.commit('setLoading',false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 });
 
             }

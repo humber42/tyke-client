@@ -86,7 +86,8 @@
                         </v-layout>
                         <v-layout>
                             <v-flex class="text-right">
-                                <v-btn type="submit" :disabled="!isFormValid||loading" color="blue" dark class="mx-2" :loading="loading">
+                                <v-btn type="submit" :disabled="!isFormValid||loading" color="blue" dark class="mx-2"
+                                       :loading="loading">
                   <span slot="loader" class="custom-loader">
                     <v-icon light>refresh</v-icon>
                   </span>
@@ -104,25 +105,33 @@
 
                 <v-card-title>Cambiar Contraseña</v-card-title>
                 <v-container>
-                    <v-alert :type="typeAlert" v-model="showSuccess" dismissible transition="scale-transition">{{infoAlert}}</v-alert>
-                    <v-form v-model="isFormChangePasswordValid" ref="formCambiar" lazy-validation @submit.prevent="handleEditPassword">
+                    <v-alert :type="typeAlert" v-model="showSuccess" dismissible transition="scale-transition">
+                        {{infoAlert}}
+                    </v-alert>
+                    <v-form v-model="isFormChangePasswordValid" ref="formCambiar" lazy-validation
+                            @submit.prevent="handleEditPassword">
                         <v-layout row class="ma-1">
                             <v-flex xs12>
-                                <v-text-field v-model="password"  label="Nueva Contraseña" type="password" :rules="passwordRules" prepend-icon="vpn_key"
-                                required></v-text-field>
+                                <v-text-field v-model="password" label="Nueva Contraseña" type="password"
+                                              :rules="passwordRules" prepend-icon="vpn_key"
+                                              required></v-text-field>
                             </v-flex>
                         </v-layout>
                         <v-layout row class="ma-1">
                             <v-flex xs12>
-                                <v-text-field v-model="passwordConfirm" required :rules="passwordRules" label="Confirmar Contraseña" type="password"  prepend-icon="lock"></v-text-field>
+                                <v-text-field v-model="passwordConfirm" required :rules="passwordRules"
+                                              label="Confirmar Contraseña" type="password"
+                                              prepend-icon="lock"></v-text-field>
                             </v-flex>
                         </v-layout>
                         <v-layout>
                             <v-flex class="text-right">
-                                <v-btn color="blue" dark class="mx-1" @click="handleEditPassword" :disabled="!isFormChangePasswordValid||loading" :loading="loading">
+                                <v-btn color="blue" dark class="mx-1" @click="handleEditPassword"
+                                       :disabled="!isFormChangePasswordValid||loading" :loading="loading">
                                     <span slot="loader" class="custom-loader">
                                         <v-icon light>refresh</v-icon>
-                                    </span>Confirmar</v-btn>
+                                    </span>Confirmar
+                                </v-btn>
                                 <v-btn @click="handleCancelEditPassword" color="red" dark class="mx-1">Cancelar</v-btn>
                             </v-flex>
                         </v-layout>
@@ -136,13 +145,14 @@
 
 <script>
     import {mapGetters} from "vuex";
+
     export default {
         name: "Profile",
 
         data: () => {
             return {
-                typeAlert:'success',
-                infoAlert:'',
+                typeAlert: 'success',
+                infoAlert: '',
                 showSuccess: false,
                 showAlert: false,
                 dialogEditData: false,
@@ -153,8 +163,8 @@
                 fullname: '',
                 email: '',
                 dob: '',
-                password:'',
-                passwordConfirm:'',
+                password: '',
+                passwordConfirm: '',
                 usernameRules: [
                     username => !!username || "El usuario es requerido",
                     username => username.length > 4 || "El usuario debe tener mas de 4 caracteres"
@@ -168,8 +178,8 @@
                     email => /.@+./.test(email) || "El correo no es valido"
                 ],
                 passwordRules: [
-                    password =>!!password||"La contraseña es requerida",
-                    password => password.length>7 || "La contraseña necesita al menos 7 caracteres"
+                    password => !!password || "La contraseña es requerida",
+                    password => password.length > 7 || "La contraseña necesita al menos 7 caracteres"
                 ],
                 menuDatePicker: false
 
@@ -208,34 +218,31 @@
                 this.dob = '';
                 this.dialogEditData = false;
             },
-            handleEditPassword(){
-                if(this.$refs.formCambiar.validate()){
-                    if(this.password===this.passwordConfirm){
-                        this.showSuccess=false;
-                        this.user.password=this.password;
-                        this.$store.dispatch('changePassword',{
-                            userChange:this.user
+            handleEditPassword() {
+                if (this.$refs.formCambiar.validate()) {
+                    if (this.password === this.passwordConfirm) {
+                        this.showSuccess = false;
+                        this.user.password = this.password;
+                        this.$store.dispatch('changePassword', {
+                            userChange: this.user
                         });
-                        this.password='';
-                        this.passwordConfirm='';
-                        this.typeAlert="success";
-                        this.infoAlert="Contraseña modificada";
-                        this.showSuccess=true;
-                    }else{
-                        this.showSuccess=true;
-                        this.typeAlert='error'
-                        this.infoAlert="Las contraseñas no coinciden"
+                        this.password = '';
+                        this.passwordConfirm = '';
+                        this.typeAlert = "success";
+                        this.infoAlert = "Contraseña modificada";
+                        this.showSuccess = true;
+                    } else {
+                        this.showSuccess = true;
+                        this.typeAlert = 'error'
+                        this.infoAlert = "Las contraseñas no coinciden"
                     }
                 }
 
             },
-            handleCancelEditPassword(){
-
-
-
-                this.password='';
-                this.passwordConfirm='';
-                this.dialogEditPassword=false;
+            handleCancelEditPassword() {
+                this.password = '';
+                this.passwordConfirm = '';
+                this.dialogEditPassword = false;
             }
 
         },

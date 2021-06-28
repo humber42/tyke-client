@@ -17,6 +17,16 @@ import QuestionNewService from "../components/QuestionService/QuestionNewService
 import QuestionMainService from "../components/QuestionService/QuestionMainService";
 import QuestionTypeService from "../components/QuestionService/QuestionTypeService";
 import BonificationService from "../components/QuestionService/BonificationService";
+import EstrategiaMainService from "../components/StrategyService/EstrategiaMainService";
+import InsigniaMainService from "../components/StrategyService/InsigniaMainService";
+import OtorgamientoMainService from "../components/StrategyService/OtorgamientoMainService";
+import RankingMainService from "../components/StrategyService/RankingMainService";
+import RegaloMainService from "../components/StrategyService/RegaloMainService";
+import TipoRegaloMainService from "../components/StrategyService/TipoRegaloMainService";
+import RolMainService from "../components/StrategyService/RolMainService";
+import EstrategiaNewService from "../components/StrategyService/EstrategiaNewService";
+import page403 from "../components/page403";
+import HomePage from "../components/HomePage";
 
 Vue.use(VueRouter);
 
@@ -106,6 +116,56 @@ const routes = [
     path: "/bonification-service",
     name: "BonificationService",
     component: BonificationService
+  },
+  {
+    path: "/strategy-service",
+    name:"EstrategiaMainService",
+    component: EstrategiaMainService
+  },
+  {
+    path: "/insignia-service",
+    name: "InsigniaMainService",
+    component: InsigniaMainService
+  },
+  {
+    path: "/otorgamiento-service",
+    name: "OtorgamientoMainService",
+    component: OtorgamientoMainService
+  },
+  {
+    path: "/ranking-service",
+    name: "RankingMainService",
+    component: RankingMainService
+  },
+  {
+    path: "/gift-service",
+    name: "RegaloMainService",
+    component: RegaloMainService
+  },
+  {
+    path: "/rol-profesional-service",
+    name: "RolMainService",
+    component: RolMainService
+  },
+  {
+    path: "/tipo-regalo-service",
+    name: "TipoRegaloMainService",
+    component: TipoRegaloMainService
+  },
+  {
+    path: "/new-strategy",
+    name: "EstrategiaNewService",
+    component: EstrategiaNewService
+  },
+  {
+    path:"/403",
+    name:"403",
+    component: page403
+  },
+  {
+    path: "/home",
+    name:"HomePage",
+    component: HomePage
   }
 
 ];

@@ -465,15 +465,15 @@
 
         },
         methods: {
-            cargarDatosTabla() {
-                this.$store.commit('setLoadingTable', true);
-                const token = localStorage.getItem('token');
-                axios.get(URL_FETCH_ALL_USERS, {
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "cache-control": "no-cache",
-                    }
-                }).then(({data}) => {
+                cargarDatosTabla() {
+                    this.$store.commit('setLoadingTable', true);
+                    const token = localStorage.getItem('token');
+                    axios.get(URL_FETCH_ALL_USERS, {
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "cache-control": "no-cache",
+                        }
+                    }).then(({data}) => {
 
                     let pos=0;
                     let found=false;
@@ -497,6 +497,9 @@
                 }).catch((err) => {
                     this.$store.commit('setLoadingTable', false)
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             dialogOpenDelete(item){
@@ -525,6 +528,9 @@
                     console.log(err);
                     this.users.push(deletedELement);
                     this.userToDelete=null;
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
                 console.log(this.userToDelete)
             },
@@ -534,6 +540,7 @@
                 this.sexEdit = item.gender;
                 this.emailEdit = item.email;
                 this.rolesEdit = item.roles;
+                this.dobEdit = item.dob
                 console.log(item)
                 this.dialogEdit = true;
                 this.userToEdit = item;
@@ -563,9 +570,12 @@
                             this.showAlert = true;
                             this.infoAlert = "El nombre de usuario ya existe";
                             this.usernameNew = '';
-                        }).catch(() => {
+                        }).catch((err) => {
                             this.stepperAddUser = 2
                             this.showAlert=false;
+                            if(err.response.status===403){
+                                this.$router.push("/403");
+                            }
                         })
                     } else {
                         this.typeAlert = 'error';
@@ -586,7 +596,12 @@
                 }).then(({data})=>{
                     this.roles = data;
                     console.log(data)
-                }).catch(err=>console.log(err));
+                }).catch(err=> {
+                    console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                });
             },
             cancelarButtonDialogInsertUser(){
                 this.dialogInsertUser=false;
@@ -649,51 +664,59 @@
                     console.log(err)
                     let pos = this.users.indexOf(userNew);
                     this.users.splice(pos,1);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             editDataOfUser(){
-                 const editedUser=
-                {
-                    dob: this.dobEdit,
-                    email: this.emailEdit,
-                    fullname: this.fullnameEdit,
-                    gender: this.sexEdit,
-                    id: this.userToEdit.id,
-                    lang: this.userToEdit.lang,
-                    loginAttempt: 0,
-                    password: this.userToEdit.password,
-                    profile_id: 0,
-                    roles: this.rolesEdit,
-                    status: this.userToEdit.status,
-                    username: this.userToEdit.username
-                }
-                const token = localStorage.getItem('token');
-                this.$store.commit('setLoading',true)
-                if(this.$refs.formEditData.validate()){
-                    axios.post(URL_UPDATE_USER,editedUser,{
-                        headers: {
-                            "Authorization": "Bearer " + token,
-                            "cache-control": "no-cache",
+                if(this.$refs.formEditData.validate()) {
+                    const editedUser =
+                        {
+                            dob: this.dobEdit,
+                            email: this.emailEdit,
+                            fullname: this.fullnameEdit,
+                            gender: this.sexEdit,
+                            id: this.userToEdit.id,
+                            lang: this.userToEdit.lang,
+                            loginAttempt: 0,
+                            password: this.userToEdit.password,
+                            profile_id: 0,
+                            roles: this.rolesEdit,
+                            status: this.userToEdit.status,
+                            username: this.userToEdit.username
                         }
-                    }).then(({data})=>{
-                        console.log(data);
-                        this.dialogEdit=false;
-                        this.$store.commit('setLoading',false)
-                        const pos = this.users.indexOf(this.userToEdit)
-                        this.users.splice(pos,1);
-                        this.users.push(editedUser);
-                        this.showSnackNotification=true;
-                        this.snackAlertType="success";
-                        this.snackInfo="Se ha editado correctamente";
-                        this.iconSnack="info_outline"
-                    }).catch(err=>{
-                        console.log(err);
-                        this.$store.commit('setLoading',false)
-                        this.showSnackNotification=true;
-                        this.snackAlertType="error";
-                        this.snackInfo="err";
-                        this.iconSnack="error_outline";
-                    })
+                    const token = localStorage.getItem('token');
+                    this.$store.commit('setLoading', true)
+                    if (this.$refs.formEditData.validate()) {
+                        axios.post(URL_UPDATE_USER, editedUser, {
+                            headers: {
+                                "Authorization": "Bearer " + token,
+                                "cache-control": "no-cache",
+                            }
+                        }).then(({data}) => {
+                            console.log(data);
+                            this.dialogEdit = false;
+                            this.$store.commit('setLoading', false)
+                            const pos = this.users.indexOf(this.userToEdit)
+                            this.users.splice(pos, 1);
+                            this.users.push(editedUser);
+                            this.showSnackNotification = true;
+                            this.snackAlertType = "success";
+                            this.snackInfo = "Se ha editado correctamente";
+                            this.iconSnack = "info_outline"
+                        }).catch(err => {
+                            console.log(err);
+                            this.$store.commit('setLoading', false)
+                            this.showSnackNotification = true;
+                            this.snackAlertType = "error";
+                            this.snackInfo = "err";
+                            this.iconSnack = "error_outline";
+                            if(err.response.status===403){
+                                this.$router.push("/403");
+                            }
+                        })
+                    }
                 }
             }
         },

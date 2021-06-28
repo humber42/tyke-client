@@ -723,6 +723,9 @@
                     }
                 }).catch(err => {
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             nextStepOne() {
@@ -770,6 +773,9 @@
                     }
                 }).catch(err => {
                     console.log(err);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
 
@@ -888,7 +894,12 @@
                         this.tipoPistasList.push(data[i].tipo);
                         i++;
                     }
-                }).catch(err=>console.log(err));
+                }).catch(err=> {
+                    console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                });
             },
             saveQuestion(){
                 const token = localStorage.getItem('token');
@@ -915,6 +926,9 @@
                 }).catch((err)=>{
                     console.log(err)
                     this.$store.commit('setLoading',false);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 });
             }
         },

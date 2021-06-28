@@ -6,33 +6,37 @@
                     <v-skeleton-loader v-if="loadingTable" class="mx-auto" type="table">
                     </v-skeleton-loader>
                     <v-data-table v-else :headers="headers"
-                                  :items="preguntasList" :items-per-page="5" class="elevation-1"
+                                  :items="estrategiasList" :items-per-page="5" class="elevation-1"
                                   :search="search"
                     >
                         <template v-slot:top>
                             <v-toolbar flat>
-                                <v-toolbar-title>Listado de preguntas</v-toolbar-title>
+                                <v-toolbar-title>Listado de estrategias</v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-text-field v-model="search" append-icon="search" label="Buscar" single-line
                                               hide-details></v-text-field>
                                 <v-spacer></v-spacer>
-                                <v-btn @click="getAllQuestions" color="orange" class="mb-2 mr-1" dark>
+                                <v-btn @click="getAllEstrategias" color="orange" class="mb-2 mr-1" dark>
                                     <v-icon class="refresh" dark/>
                                     Refrescar
                                 </v-btn>
-                                <v-btn color="success" @click="insertarPregunta" class="mb-2 mr-1" dark>Nueva pregunta</v-btn>
+                                <v-btn v-if="!isStudent" @click="createEstrategia" color="success" class="mb-2 mr-1" dark>
+                                    <v-icon class="add" dark/>
+                                    Nueva
+                                </v-btn>
+
                                 <!--Dialog para eliminar-->
-                                <v-dialog v-model="dialogDeletePregunta" max-width="500px">
+                                <v-dialog v-model="dialogDeleteEstrategia" max-width="500px">
                                     <v-card>
-                                        <v-card-title>¿Desea eliminar esta pregunta?</v-card-title>
+                                        <v-card-title>¿Desea eliminar la estrategia?</v-card-title>
                                         <v-card-actions>
                                             <v-flex class="text-center">
                                                 <v-btn color="success" class="mx-1" style="color: white!important;"
-                                                       @click="deletePregunta" :disabled="loading" :loading="loading">
+                                                       @click="deleteEstrategia" :disabled="loading" :loading="loading">
                                                     <span slot="loader" class="custom-loader"><v-icon>refresh</v-icon></span>Confirmar
                                                 </v-btn>
                                                 <v-btn color="red" class="mx-1" style="color: white!important;"
-                                                       @click="dialogDeletePregunta=false">Cancelar
+                                                       @click="cancelar">Cancelar
                                                 </v-btn>
                                             </v-flex>
                                         </v-card-actions>
@@ -41,7 +45,6 @@
 
                             </v-toolbar>
                         </template>
-
                         <template v-slot:item.actions="{item}">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on,attrs}">
@@ -49,7 +52,7 @@
                                         delete
                                     </v-icon>
                                 </template>
-                                <span>Eliminar pregunta</span>
+                                <span>Eliminar la estrategia</span>
                             </v-tooltip>
                         </template>
                     </v-data-table>
@@ -60,91 +63,102 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters} from "vuex";
     import axios from "axios";
-    import {URL_DELETE_QUESTION, URL_FETCH_ALL_QUESTIONS} from "../../urlResources";
+    import {URL_ESTRATEGIA_DELETE, URL_FETCH_ALL_STRATEGY} from "../../urlResources";
+
     export default {
-        name: "QuestionMainService",
-        data(){
+        name: "EstrategiaMainService",
+        data:()=>{
             return{
                 headers:[
-                    {text:"Titulo",value:"tituloPregunta",align:"center"},
-                    {text:"Asignatura",value: "asignaturaObject.nombre",align: "center"},
-                    {text:"Cantidad de respuestas",value:"respuestasById.length",align: "center"},
-                    {text:"Puntuación",value:"cantPuntosCompletarCorrectamente",align:"center"},
-                    {text: "Cantidad de pistas",value: "pistasById.length",align: "center"},
-                    {text:"Tiempo para responder (s)",value: "tiempoEnSegundos",align: "center"},
+                    {text:"Nombre",value:"nombre",align:"center"},
+                    {text:"Puntos",value:"puntos",align: "center"},
+                    {text:"Creador",value:"profesor.usuario.fullname"},
+                    {text:"Cantidad de temas",value: "temas.length",align: "center"},
+                    {text:"Cantidad de preguntas",value: "estrategiaPreguntasByIdEstrategia.length",align: "center"},
                     {text:"Acciones",value: "actions",align: "center"}
                 ],
-                preguntasList:[],
                 search:'',
-                dialogDeletePregunta:false,
-                dialogEditPregunta:false,
-
-                preguntaToDelete:null
-
+                dialogDeleteEstrategia:false,
+                estrategiaToDelete:null,
+                estrategiasList:[],
+                isStudent:false
             }
         },
-        computed:{
-            ...mapGetters(['loading','loadingTable'])
-        },
         methods:{
-            getAllQuestions(){
+            getAllEstrategias(){
+                const token = localStorage.getItem('token');
                 this.$store.commit('setLoadingTable',true);
-                const token = localStorage.getItem('token');
-                axios.get(URL_FETCH_ALL_QUESTIONS,{
+                axios.get(URL_FETCH_ALL_STRATEGY,{
                     headers: {
                         "Authorization": "Bearer " + token,
                         "cache-control": "no-cache",
-                    }
-                }).then(({data})=>{
-                    console.log(data)
-                    this.preguntasList=data;
-                    this.$store.commit('setLoadingTable',false);
-                }).catch((err)=>{
-                    console.log(err)
-                    this.$store.commit('setLoadingTable',false);
-                    if(err.response.status===403){
-                        this.$router.push("/403");
-                    }
-                });
-            },
-            insertarPregunta(){
-                this.$router.push("/question-new-service")
-            },
-            deletePregunta(){
-                const token = localStorage.getItem('token');
-                this.$store.commit('setLoading',true);
-                axios.delete(URL_DELETE_QUESTION,{
-                    params:{
-                        id:this.preguntaToDelete.id
                     },
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "cache-control": "no-cache",
-                    }
-                }).then(()=>{
-                    this.$store.commit('setLoading',false);
-                    this.dialogDeletePregunta=false;
-                    this.getAllQuestions()
-                }).catch(err=> {
-                    this.$store.commit('setLoading',true);
-                    console.log(err)
+                }).then(({data})=>{
+                    this.estrategiasList=data;
+                    this.$store.commit('setLoadingTable',false);
+                }).catch(err=>{
+                    console.log(err);
+                    this.$store.commit('setLoadingTable',false);
                     if(err.response.status===403){
                         this.$router.push("/403");
                     }
                 })
             },
-            cancelar(){
+            createEstrategia(){
+                this.$router.push("/new-strategy");
+            },
+            deleteEstrategia(){
+                const token = localStorage.getItem('token');
+                this.$store.commit('setLoading',true);
+                axios.delete(URL_ESTRATEGIA_DELETE,{
+                    params:{
+                        id:this.estrategiaToDelete.idEstrategia
+                    },
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "cache-control": "no-cache",
+                    },
+                }).then(()=>{
+                    this.$store.commit('setLoading',false);
+                    this.dialogDeleteEstrategia=false;
+                    this.getAllEstrategias();
+                }).catch(err=>{
+                    console.log(err)
+                    this.$store.commit('setLoading',false);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                })
 
             },
+            cancelar(){
+                this.dialogDeleteEstrategia=false;
+            },
             deleteItem(item){
-                this.preguntaToDelete=item;
-                this.dialogDeletePregunta=true;
+                this.dialogDeleteEstrategia=true;
+                this.estrategiaToDelete=item;
+            },
+            isUserStudent(){
+                let i = 0;
+                let found=false;
+                while(i<this.user.roles.length&&!found){
+                    if(this.user.roles[i].roleName==="Estudiante"){
+                        found=true;
+                        this.isStudent =true;
+                    }
+                    i++;
+                }
+                return !found;
             }
         },
-        created() {
-            this.getAllQuestions();
+        computed:{
+            ...mapGetters(['loadingTable',"loading","user"])
+        },
+       created() {
+            this.getAllEstrategias();
+           this.isUserStudent();
         }
     }
 </script>

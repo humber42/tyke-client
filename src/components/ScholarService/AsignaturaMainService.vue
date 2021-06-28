@@ -334,6 +334,9 @@
                     this.iconSnack = 'danger';
                     this.snackInfo = "Ha ocurrido un error al cargar las asignaturas";
                     this.snackAlertType = 'error';
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getColorChip(item) {
@@ -373,6 +376,9 @@
                     this.iconSnack = 'error';
                     this.snackInfo = "La asignatura no fue insertada";
                     this.snackAlertType = 'error';
+                    if(error.response.status===403){
+                        this.$router.push("/403");
+                    }
 
                 })
             },
@@ -403,6 +409,9 @@
                     this.iconSnack = 'error';
                     this.snackInfo = "La asignatura no fue modificada";
                     this.snackAlertType = 'error';
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getAllCareers(){
@@ -419,6 +428,9 @@
                 }).catch(err=>{
                     console.log(err);
                     this.$store.commit('setLoading',false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getAllSemestres(){
@@ -436,6 +448,9 @@
                     }
                 }).catch(err=>{
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             addToCareer(item){
@@ -503,6 +518,9 @@
                     }).catch(err=>{
                         console.log(err)
                         i=this.careersToAsign.length
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
                     i++;
                 }

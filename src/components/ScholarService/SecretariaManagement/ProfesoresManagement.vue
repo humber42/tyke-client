@@ -488,6 +488,9 @@
                 }).catch(err => {
                     console.log(err);
                     this.$store.commit('setLoadingTable', false);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getAllFacultad() {
@@ -507,6 +510,9 @@
                 }).catch(err => {
                     this.facultadList.push("Ocurrio un error no hay datos");
                     console.log(err);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getUserProfessors() {
@@ -525,6 +531,9 @@
                     }
                 }).catch(err => {
                     console.log(err);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             saveProfesor() {
@@ -552,6 +561,9 @@
                     }).catch(err => {
                         this.$store.commit('setLoading', false)
                         console.log(err)
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
                 }
             },
@@ -608,6 +620,9 @@
                 }).catch(err => {
                     console.log(err);
                     this.$store.commit('setLoading', false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
 
             },
@@ -630,6 +645,9 @@
                 }).catch(err => {
                     console.log(err);
                     this.$store.commit('setLoading', false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             getCarrerasByFaculty(profesor) {
@@ -652,6 +670,9 @@
                     }
                 }).catch(err => {
                     console.log(err);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             updateData() {
@@ -674,7 +695,12 @@
                         this.asignaturasList.push(data[i].nombre);
                         i++;
                     }
-                }).catch(err => console.log(err));
+                }).catch(err => {
+                    console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
+                });
             },
             getAllGroupsByACareer() {
                 const token = localStorage.getItem('token');
@@ -695,6 +721,9 @@
                 }).catch(err => {
                     this.$store.commit('setLoading', false);
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             addStudentToAssignGroup() {
@@ -756,6 +785,9 @@
                         this.infoAlert = err
                         console.log(err)
                         this.$store.commit('setLoading', false);
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
                 }
             },

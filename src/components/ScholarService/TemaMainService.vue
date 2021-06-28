@@ -242,6 +242,9 @@
                     .catch(error => {
                         this.$store.commit('setLoadingTable', false);
                         console.log(error)
+                        if(error.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
             },
             getAsignaturas() {
@@ -261,10 +264,13 @@
                     }
                 }).catch((err) => {
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             saveTema() {
-                if (this.$refs.insertFormTema.vaidate()) {
+                if (this.$refs.insertFormTema.validate()) {
                     const token = localStorage.getItem('token');
                     const payload = {
                         asignaturas: this.selectAsignaturas,
@@ -287,6 +293,9 @@
                     }).catch(err => {
                         console.log(err)
                         this.$store.commit('setLoading', false)
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
                     console.log("Hola")
                 }
@@ -314,6 +323,9 @@
                     this.dialogEditarTema = false;
                 }).catch((err) => {
                     console.log(err);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
 
                 console.log("update")
@@ -335,6 +347,9 @@
                     this.dialogEliminarTema = false;
                 }).catch((err) => {
                     console.log(err);
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
 
             },

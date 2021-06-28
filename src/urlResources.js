@@ -76,3 +76,41 @@ export const URL_FETCH_ALL_QUESTIONS="http://192.168.137.1:9092/question-service
 export const URL_SAVE_QUESTION="http://192.168.137.1:9092/question-service/api/pregunta/save/complete";
 export const URL_DELETE_QUESTION="http://192.168.137.1:9092/question-service/api/pregunta/delete/id";
 
+
+//Strategy Service
+export const URL_FETCH_ALL_TIPO_REGALO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/tipo-regalo/all";
+export const URL_SAVE_TIPO_REGALO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/tipo-regalo/save";
+export const URL_DELETE_TIPO_REGALO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/tipo-regalo/delete/id";
+
+export const URL_FETCH_ALL_OTORGAMIENTO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/otorgamiento/all";
+export const URL_SAVE_OTORGAMIENTO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/otorgamiento/save";
+export const URL_DELETE_OTORGAMIENTO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/otorgamiento/delete/id";
+export const URL_EDIT_OTORGAMIENTO="http://192.168.137.1:9092/tyke-strategy-service/api/v1/otorgamiento/update";
+
+export const URL_FETCH_ALL_GIFTS="http://192.168.137.1:9092/tyke-strategy-service/api/v1/regalo/all";
+export const URL_SAVE_GIFT="http://192.168.137.1:9092/tyke-strategy-service/api/v1/regalo/save";
+export const URL_DELETE_GIFT="http://192.168.137.1:9092/tyke-strategy-service/api/v1/regalo/delete/id";
+export const URL_EDIT_GIFT="http://192.168.137.1:9092/tyke-strategy-service/api/v1/regalo/update";
+
+export const URL_FETCH_ALL_ROL_PROFESIONAL="http://192.168.137.1:9092/tyke-strategy-service/api/v1/rol-profesional/all";
+export const URL_SAVE_ROL_PROFESIONAL="http://192.168.137.1:9092/tyke-strategy-service/api/v1/rol-profesional/save";
+export const URL_DELETE_ROL_PROFESIONAL="http://192.168.137.1:9092/tyke-strategy-service/api/v1/rol-profesional/delete/id";
+
+export const URL_FETCH_ALL_INSIGNIA="http://192.168.137.1:9092/tyke-strategy-service/api/v1/insignia/all";
+export const URL_SAVE_INSIGNIA="http://192.168.137.1:9092/tyke-strategy-service/api/v1/insignia/save";
+export const URL_DELETE_INSIGNIA="http://192.168.137.1:9092/tyke-strategy-service/api/v1/insignia/delete/id";
+export const URL_EDIT_INSIGNIA="http://192.168.137.1:9092/tyke-strategy-service/api/v1/insignia/update";
+
+export const URL_FETCH_ALL_STRATEGY="http://192.168.137.1:9092/tyke-strategy-service/api/v1/estrategia/all";
+export const URL_ESTRATEGIA_SAVE="http://192.168.137.1:9092/tyke-strategy-service/api/v1/estrategia/save/all";
+export const URL_ESTRATEGIA_DELETE="http://192.168.137.1:9092/tyke-strategy-service/api/v1/estrategia/delete/id";
+
+/**
+ * URLS PARA CONFORMAR LA ESTRATEGIA
+ */
+export const URL_GET_PROFESOR_BY_USER_ID="http://192.168.137.1:9092/schoolar-management-service/api/profesor/user/id";
+export const URL_GET_TEMA_BY_ASIGNATURA_ID="http://192.168.137.1:9092/schoolar-management-service/api/tema/asignatura";
+export const URL_GET_GROUPS_BY_PROFESOR_AND_ASIGNATURA="http://192.168.137.1:9092/schoolar-management-service/api/grupo/all/asignatura-profesor";
+export const URL_GET_PREGUNTAS_BY_ASIGNATURA="http://192.168.137.1:9092/question-service/api/pregunta/all/signature";
+
+export const URL_GET_ALL_RANKING="http://192.168.137.1:9092/tyke-strategy-service/api/v1/puntuacion/all";

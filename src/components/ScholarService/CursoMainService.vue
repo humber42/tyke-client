@@ -168,6 +168,9 @@
                  }).catch((err)=>{
                      console.log(err);
                      this.$store.commit('setLoadingTable',false);
+                     if(err.response.status===403){
+                         this.$router.push("/403");
+                     }
                  })
              },
             saveCourse(){
@@ -190,6 +193,9 @@
                  }).catch((err)=>{
                         console.log(err);
                         this.$store.commit('setLoading',false);
+                     if(err.response.status===403){
+                         this.$router.push("/403");
+                     }
                      })
             },
             getColorChip(item) {
@@ -226,6 +232,9 @@
                      console.log(err);
                      this.$store.commit('setLoading',false)
                      this.dialogEditCourse=false;
+                     if(err.response.status===403){
+                         this.$router.push("/403");
+                     }
                  })
             }
         },

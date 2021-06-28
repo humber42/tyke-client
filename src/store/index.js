@@ -15,7 +15,7 @@ export default new Vuex.Store({
   state: {
     loading: false,
     user: null,
-    error: null,
+    error: false,
     authError: null,
     loadingTable:null
   },
@@ -52,6 +52,7 @@ export default new Vuex.Store({
         })
         .catch((err) => {
           commit("setLoading", false);
+          commit('setError',err)
           consoleError(err);
         });
     },
@@ -122,6 +123,9 @@ export default new Vuex.Store({
       }).catch(error=>{
         commit('setError',error);
         consoleError(error);
+        if(error.response.status===403){
+          this.$router.push("/403");
+        }
       })
       commit('setLoading',false);
     },
@@ -137,9 +141,12 @@ export default new Vuex.Store({
       }).then(()=>{
         commit('setLoading',false);
         commit('clearError')
-      }).catch(err=>{
+      }).catch(err =>{
         commit('setError',err);
         commit('setLoading',false);
+        if(err.response.status===403){
+          this.$router.push("/403");
+        }
       })
     },
     saveUser:({commit},payload)=>{
@@ -157,6 +164,9 @@ export default new Vuex.Store({
       }).catch((error)=>{
         commit('setError',error)
         commit('setLoading',false)
+        if(error.response.status===403){
+          this.$router.push("/403");
+        }
       })
 
     }

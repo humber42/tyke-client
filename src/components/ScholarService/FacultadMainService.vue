@@ -211,6 +211,9 @@
                     this.snackAlertType = "error";
                     this.snackInfo = "Ha habido un problema al cargar los datos de las facultades";
                     this.iconSnack = "error_outline"
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             saveFaculty() {
@@ -262,9 +265,18 @@
                                     this.snackAlertType = "error";
                                     this.snackInfo = "Ha ocurrido un error al insertar la facultad";
                                     this.iconSnack = "error_outline"
+                                    if(err.response.status===403){
+                                        this.$router.push("/403");
+                                    }
                                 })
                             }
-                        ).catch(err => console.log(err, "Problema al subir file :("))
+                        ).catch(err => {
+                                console.log(err, "Problema al subir file :(")
+                            if(err.response.status===403){
+                                this.$router.push("/403");
+                            }
+                            }
+                        )
 
                     } else {
                         const token = localStorage.getItem('token');
@@ -301,6 +313,9 @@
                             this.snackAlertType = "error";
                             this.snackInfo = "Ha ocurrido un error al actualizar";
                             this.iconSnack = "error_outline"
+                            if(err.response.status===403){
+                                this.$router.push("/403");
+                            }
                         });
                     }
                 }
@@ -358,6 +373,9 @@
                         this.snackInfo = "Ha ocurrido un error al eliminar la facultad";
                         this.iconSnack = "error_outline"
                         console.log(err)
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
 
             },

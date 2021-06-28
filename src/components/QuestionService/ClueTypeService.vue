@@ -215,6 +215,9 @@
                     }).catch(err=>{
                         console.log(err)
                         this.$store.commit('setLoading',false);
+                        if(err.response.status===403){
+                            this.$router.push("/403");
+                        }
                     })
                 }
             },
@@ -263,6 +266,9 @@
                 }).catch(err=>{
                     console.log(err);
                     this.$store.commit('setLoading',false)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 })
             },
             deleteTypeClue(){
@@ -280,6 +286,9 @@
                     this.getAllTipoPista()
                 }).catch(err=>{
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 });
             },
             cancelar(){
@@ -304,6 +313,9 @@
                     this.tipoPistaList=data;
                 }).catch(err=>{
                     console.log(err)
+                    if(err.response.status===403){
+                        this.$router.push("/403");
+                    }
                 });
             }
         },
