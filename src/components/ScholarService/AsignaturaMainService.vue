@@ -369,6 +369,7 @@
                     this.iconSnack = 'success';
                     this.snackInfo = "Asignatura insertada con exito";
                     this.snackAlertType = 'success';
+                    this.$refs.insertFormAsignatura.reset();
 
                 }).catch(error => {
                     console.log(error);
@@ -515,6 +516,13 @@
                         }
                     }).then(({data})=>{
                         console.log(data)
+                        this.careersList=[];
+                        this.careersToAsign=[];
+                        this.careerSelected=0;
+                        this.careerToAsignSelected=0;
+                        this.someCareerSelected=false;
+                        this.someCareerSelectedRigth=false;
+                        this.dialogAddCareers = false;
                     }).catch(err=>{
                         console.log(err)
                         i=this.careersToAsign.length
@@ -524,7 +532,6 @@
                     })
                     i++;
                 }
-                this.dialogAddCareers = false;
             }
         },
         computed: {

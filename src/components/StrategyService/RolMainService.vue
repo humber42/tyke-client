@@ -231,7 +231,7 @@
                     },
                 }).then(()=>{
                     this.dialogDeleteRolProfesional=false;
-                    this.$store.commit('setLoading',true)
+                    this.$store.commit('setLoading',false)
                     this.getAllProfessionalsRols();
                 }).catch(err=>{
                     this.$store.commit('setLoading',false);

@@ -114,3 +114,4 @@ export const URL_GET_GROUPS_BY_PROFESOR_AND_ASIGNATURA="http://192.168.137.1:909
 export const URL_GET_PREGUNTAS_BY_ASIGNATURA="http://192.168.137.1:9092/question-service/api/pregunta/all/signature";
 
 export const URL_GET_ALL_RANKING="http://192.168.137.1:9092/tyke-strategy-service/api/v1/puntuacion/all";
+export const URL_POST_USER_IMG="http://192.168.137.1:9092/user-service/uploadFile";

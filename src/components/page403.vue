@@ -33,7 +33,7 @@
                 this.$store.dispatch('logoutUser')
             },
             volverAtras() {
-                this.$router.push("/");
+                this.$router.push("/home");
             }
         }
     }

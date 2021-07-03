@@ -4,7 +4,7 @@
       <v-navigation-drawer permanent expand-on-hover app v-model="drawer" class="text-center">
         <v-list-item class="2px">
           <v-list-item-avatar class="pr-1">
-            <v-img src="http://localhost:9000/img/751" lazy-src="http://localhost:9000/img/751"></v-img>
+            <v-img contain :src="user.image_url"></v-img>
           </v-list-item-avatar>
           <v-list-item-title>{{user.fullname}}</v-list-item-title>
         </v-list-item>

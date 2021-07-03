@@ -12,7 +12,7 @@
 
     <v-container>
 
-        <v-row>
+        <v-row v-if="rankingList.length>0">
             <ranking-main-service></ranking-main-service>
         </v-row>
         <v-row class="mt-8">
@@ -84,7 +84,12 @@
     import {mapGetters} from "vuex";
     import RankingMainService from "./StrategyService/RankingMainService";
     import axios from "axios";
-    import {URL_FETCH_ALL_QUESTIONS, URL_FETCH_ALL_STRATEGY, URL_FETCH_ALL_USERS} from "../urlResources";
+    import {
+        URL_FETCH_ALL_QUESTIONS,
+        URL_FETCH_ALL_STRATEGY,
+        URL_FETCH_ALL_USERS,
+        URL_GET_ALL_RANKING
+    } from "../urlResources";
 
     export default {
         name: "HomePage",
@@ -95,7 +100,8 @@
                 isAdmin:false,
                 estrategiasList:[],
                 preguntasList:[],
-                users:[]
+                users:[],
+                rankingList:[]
             }
         },
         computed:{
@@ -137,6 +143,22 @@
                     i++;
                 }
                 return !found;
+            },
+            getAllRanking(){
+                const token = localStorage.getItem('token');
+                this.$store.commit('setLoadingTable',true);
+                axios.get(URL_GET_ALL_RANKING,{
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "cache-control": "no-cache",
+                    }
+                }).then(({data})=>{
+                    this.rankingList=data;
+                    this.$store.commit('setLoadingTable',false);
+                }).catch(err=> {
+                    console.log(err)
+                    this.$store.commit('setLoadingTable',false);
+                });
             },
             isUserAdministrador(){
                 let i = 0;
@@ -215,6 +237,7 @@
             this.getAllEstrategias()
             this.getAllQuestions();
             this.cargarDatosTabla();
+            this.getAllRanking();
         }
     }
 </script>

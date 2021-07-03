@@ -1,6 +1,7 @@
 <template>
     <v-container>
-        <notification :icon="iconSnack" :info-alert="snackInfo" :type-alert="snackAlertType" :show-snack="showSnackNotification"></notification>
+        <notification :icon="iconSnack" :info-alert="snackInfo" :type-alert="snackAlertType"
+                      :show-snack="showSnackNotification"></notification>
         <v-layout row wrap>
             <v-flex>
                 <v-card outlined elevation="20">
@@ -19,10 +20,12 @@
                             <v-toolbar flat>
                                 <v-toolbar-title>Lista de usuarios</v-toolbar-title>
                                 <v-spacer></v-spacer>
-                                <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                                <v-text-field v-model="search" append-icon="search" label="Buscar" single-line
+                                              hide-details></v-text-field>
                                 <v-spacer></v-spacer>
                                 <v-btn @click="cargarDatosTabla" color="orange" class="mb-2 mr-1" dark>
-                                    <v-icon class="refresh" dark/> Refrescar
+                                    <v-icon class="refresh" dark/>
+                                    Refrescar
                                 </v-btn>
                                 <v-dialog v-model="dialogInsertUser" max-width="750px" persistent>
                                     <template v-slot:activator="{on,attrs}">
@@ -46,7 +49,7 @@
                                                 <v-stepper-step step="3">Información del Usuario</v-stepper-step>
                                             </v-stepper-header>
 
-                                            <v-stepper-items style="background-color: rgba(86,195,246,0.84)">
+                                            <v-stepper-items style="background-color: #3f9655">
                                                 <v-alert :type="typeAlert" v-model="showAlert" dismissible
                                                          transition="scale-transition">{{infoAlert}}
                                                 </v-alert>
@@ -88,12 +91,11 @@
                                                                                                   v-bind="attrs"
                                                                                                   v-on="on"
                                                                                                   prepend-icon="calendar_today"
-                                                                                    :rules="dateBirthRules">
+                                                                                                  :rules="dateBirthRules">
                                                                                     </v-text-field>
                                                                                 </template>
                                                                                 <v-date-picker v-model="birthDateNew"
                                                                                                no-title scrollable>
-                                                                                    <v-spacer></v-spacer>
                                                                                     <v-btn text color="blue"
                                                                                            @click="menuDatePicker=false">
                                                                                         Cancelar
@@ -166,7 +168,17 @@
                                                                                           aria-required="true"/>
                                                                         </v-flex>
                                                                     </v-layout>
-
+                                                                    <v-layout row class="ma-1">
+                                                                        <v-flex xs12>
+                                                                            <v-file-input accept="image/*"
+                                                                                          label="Foto perfil"
+                                                                                          v-model="file"
+                                                                                          :rules="imageRule"
+                                                                                          show-size
+                                                                            >
+                                                                            </v-file-input>
+                                                                        </v-flex>
+                                                                    </v-layout>
                                                                 </v-card>
                                                             </v-col>
                                                         </v-row>
@@ -176,7 +188,8 @@
                                                                        @click="cancelarButtonDialogInsertUser">Cancelar
                                                                 </v-btn>
                                                                 <v-btn class="mx-1" color="blue" dark type="submit"
-                                                                       :disabled="!isFormNewCuentaValid">Siguiente<v-icon class="arrow_forward"/>
+                                                                       :disabled="!isFormNewCuentaValid">Siguiente
+                                                                    <v-icon class="arrow_forward"/>
                                                                 </v-btn>
 
                                                             </v-flex>
@@ -185,38 +198,55 @@
                                                 </v-stepper-content>
                                                 <v-stepper-content step="2">
                                                     <v-container>
-                                                    <v-row>
-                                                        <v-col cols="6">
-                                                            <v-card  shaped elevation="5">
-                                                                <v-card-title>Roles</v-card-title>
-                                                                <v-layout row class="ma-1" v-for="rol in roles" :key="rol.id">
-                                                                    <v-flex xs12>
-                                                                        <v-checkbox v-model="rolesNew"  :label="rol.roleName" :value="rol"/>
-                                                                    </v-flex>
-                                                                </v-layout>
+                                                        <v-row>
+                                                            <v-col cols="6">
+                                                                <v-card shaped elevation="5">
+                                                                    <v-card-title>Roles</v-card-title>
+                                                                    <v-layout row class="ma-1" v-for="rol in roles"
+                                                                              :key="rol.id">
+                                                                        <v-flex xs12>
+                                                                            <v-checkbox v-model="rolesNew"
+                                                                                        :label="rol.roleName"
+                                                                                        :value="rol"/>
+                                                                        </v-flex>
+                                                                    </v-layout>
 
-                                                            </v-card>
-                                                        </v-col>
-                                                        <v-col>
-                                                            <v-card  outlined elevation="5">
-                                                                <v-card-title>Descripción de los permisos</v-card-title>
-                                                                <v-card-text v-for="rol in rolesNew" :key="rol.id">- {{rol.description}}</v-card-text>
-                                                            </v-card>
-                                                        </v-col>
-                                                    </v-row>
+                                                                </v-card>
+                                                            </v-col>
+                                                            <v-col>
+                                                                <v-card outlined elevation="5">
+                                                                    <v-card-title>Descripción de los permisos
+                                                                    </v-card-title>
+                                                                    <v-card-text v-for="rol in rolesNew" :key="rol.id">-
+                                                                        {{rol.description}}
+                                                                    </v-card-text>
+                                                                </v-card>
+                                                            </v-col>
+                                                        </v-row>
                                                         <v-layout row class="mt-2" wrap>
                                                             <v-row>
                                                                 <v-col cols="3">
-                                                                        <v-flex xs12 class="text-left">
-                                                                            <v-btn color="blue" dark  @click="backStepperUser">
-                                                                                <v-icon left class="arrow_back"/>Atras</v-btn>
-                                                                        </v-flex>
-                                                                </v-col><v-col cols="9">                                                           <v-flex xs12 class="text-right">
-                                                                    <v-btn class="mx-1" color="red" dark @click="cancelarButtonDialogInsertUser">Cancelar</v-btn>
-                                                                    <v-btn class="mx-1" color="blue" dark @click="siguienteRolesDialogInsertUser">
-                                                                        Siguiente<v-icon right class="arrow_forward"/></v-btn>
-                                                                </v-flex>
-                                                            </v-col>
+                                                                    <v-flex xs12 class="text-left">
+                                                                        <v-btn color="blue" dark
+                                                                               @click="backStepperUser">
+                                                                            <v-icon left class="arrow_back"/>
+                                                                            Atras
+                                                                        </v-btn>
+                                                                    </v-flex>
+                                                                </v-col>
+                                                                <v-col cols="9">
+                                                                    <v-flex xs12 class="text-right">
+                                                                        <v-btn class="mx-1" color="red" dark
+                                                                               @click="cancelarButtonDialogInsertUser">
+                                                                            Cancelar
+                                                                        </v-btn>
+                                                                        <v-btn class="mx-1" color="blue" dark
+                                                                               @click="siguienteRolesDialogInsertUser">
+                                                                            Siguiente
+                                                                            <v-icon right class="arrow_forward"/>
+                                                                        </v-btn>
+                                                                    </v-flex>
+                                                                </v-col>
                                                             </v-row>
                                                         </v-layout>
                                                     </v-container>
@@ -231,22 +261,35 @@
                                                                     <v-card-text>Nombre: {{fullnameNew}}</v-card-text>
                                                                     <v-card-text>Usuario: {{usernameNew}}</v-card-text>
                                                                     <v-card-text>Correo: {{emailNew}}</v-card-text>
-                                                                    <v-card-text>Fecha de Nacimiento: {{birthDateNew}}</v-card-text>
+                                                                    <v-card-text>Fecha de Nacimiento: {{birthDateNew}}
+                                                                    </v-card-text>
                                                                 </v-col>
                                                                 <v-col cols="6">
-                                                                    <v-card-text>Genero: {{genderNew==='f'?"Femenino":"Masculino"}}</v-card-text>
-                                                                    <v-card-text>Roles:<v-card-text v-for="rol in rolesNew" :key="rol.id"> - {{rol.roleName}}</v-card-text></v-card-text>
+                                                                    <v-card-text>Genero:
+                                                                        {{genderNew==='f'?"Femenino":"Masculino"}}
+                                                                    </v-card-text>
+                                                                    <v-card-text>Roles:
+                                                                        <v-card-text v-for="rol in rolesNew"
+                                                                                     :key="rol.id"> - {{rol.roleName}}
+                                                                        </v-card-text>
+                                                                    </v-card-text>
                                                                 </v-col>
                                                             </v-row>
                                                             <v-divider></v-divider>
                                                             <v-layout row wrap class="ma-1">
                                                                 <v-flex class="text-right my-2">
-                                                                    <v-btn class="mx-1" color="red" dark @click="cancelarButtonDialogInsertUser">Cancelar</v-btn>
-                                                                    <v-btn class="mx-1" color="blue" dark @click="saveUser" :disabled="loading" :loading="loading">
+                                                                    <v-btn class="mx-1" color="red" dark
+                                                                           @click="cancelarButtonDialogInsertUser">
+                                                                        Cancelar
+                                                                    </v-btn>
+                                                                    <v-btn class="mx-1" color="blue" style="color: white!important;"
+                                                                           @click="saveUser" :disabled="loading"
+                                                                           :loading="loading">
                                                                         <span slot="loader" class="custom-loader">
-                                                                            <v-icon dark class="refresh"/>
+                                                                            <v-icon class="refresh"/>
                                                                         </span>
-                                                                        Confirmar</v-btn>
+                                                                        Confirmar
+                                                                    </v-btn>
                                                                 </v-flex>
                                                             </v-layout>
                                                         </v-card>
@@ -271,15 +314,18 @@
                                     <v-card>
                                         <v-card-title class="font-weight-light">Editar datos del usuario</v-card-title>
                                         <v-container fluid>
-                                            <v-form v-model="formEditIsValid" lazy-validation @submit.prevent="editDataOfUser" ref="formEditData">
+                                            <v-form v-model="formEditIsValid" lazy-validation
+                                                    @submit.prevent="editDataOfUser" ref="formEditData">
                                                 <v-layout row class="ma-1">
                                                     <v-flex xs12>
-                                                        <v-text-field :rules="fullnameRules" v-model="fullnameEdit" label="Nombre" prepend-icon="text_fields"/>
+                                                        <v-text-field :rules="fullnameRules" v-model="fullnameEdit"
+                                                                      label="Nombre" prepend-icon="text_fields"/>
                                                     </v-flex>
                                                 </v-layout>
                                                 <v-layout row class="ma-1">
                                                     <v-flex xs12>
-                                                        <v-text-field :rules="emailRules" v-model="emailEdit" label="Correo" prepend-icon="email"/>
+                                                        <v-text-field :rules="emailRules" v-model="emailEdit"
+                                                                      label="Correo" prepend-icon="email"/>
                                                     </v-flex>
                                                 </v-layout>
                                                 <v-layout row class="ma-1">
@@ -303,7 +349,7 @@
                                                                               :rules="dateBirthRules">
                                                                 </v-text-field>
                                                             </template>
-                                                            <v-date-picker  v-model="dobEdit"
+                                                            <v-date-picker v-model="dobEdit"
                                                                            no-title scrollable>
                                                                 <v-spacer></v-spacer>
                                                                 <v-btn text color="blue"
@@ -333,21 +379,26 @@
                                                     <v-flex xs12>
                                                         <h4 class="font-weight-medium">Roles</h4>
                                                         <v-row>
-                                                            <v-col v-for="rol in roles" :key="rol.id" :cols="12/roles.length">
-                                                                <v-checkbox v-model="rolesEdit"  :value="rol" :label="rol.roleName" color="blue"/>
+                                                            <v-col v-for="rol in roles" :key="rol.id"
+                                                                   :cols="12/roles.length">
+                                                                <v-checkbox v-model="rolesEdit" :value="rol"
+                                                                            :label="rol.roleName" color="blue"/>
                                                             </v-col>
                                                         </v-row>
                                                     </v-flex>
                                                 </v-layout>
                                                 <v-layout row class="ma-1">
                                                     <v-flex xs12 class="text-right">
-                                                        <v-btn color="blue" :disabled="!formEditIsValid||loading" :loading="loading" type="submit">
+                                                        <v-btn color="blue" :disabled="!formEditIsValid||loading"
+                                                               :loading="loading" type="submit">
                                                             <span slot="loader" class="custom-loader" dark>
                                                                 <v-icon light>refresh</v-icon>
                                                             </span>
                                                             Editar
                                                         </v-btn>
-                                                        <v-btn color="red" class="mx-1" @click="dialogEdit=false">Cancelar</v-btn>
+                                                        <v-btn color="red" class="mx-1" @click="dialogEdit=false">
+                                                            Cancelar
+                                                        </v-btn>
                                                     </v-flex>
                                                 </v-layout>
                                             </v-form>
@@ -368,7 +419,8 @@
                             </v-tooltip>
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on,attrs}">
-                                    <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="dialogOpenDelete(item)" color="red">
+                                    <v-icon v-bind="attrs" v-on="on" class="mr-2" @click="dialogOpenDelete(item)"
+                                            color="red">
                                         delete
                                     </v-icon>
                                 </template>
@@ -387,7 +439,7 @@
         URL_DELETE_USER,
         URL_FETCH_ALL_ROLES,
         URL_FETCH_ALL_USERS,
-        URL_GET_USER_BY_USERNAME, URL_UPDATE_USER
+        URL_GET_USER_BY_USERNAME, URL_POST_USER_IMG, URL_SAVE_USER, URL_UPDATE_USER
     } from "../../urlResources";
     import {mapGetters} from "vuex";
     import axios from "axios"
@@ -398,7 +450,7 @@
         components: {Notification},
         data: () => {
             return {
-                search:'',
+                search: '',
                 headers: [
                     {text: "Nombre", value: "fullname", align: 'center'},
                     {text: "Usuario", value: "username", align: 'center'},
@@ -419,9 +471,12 @@
                 confirmPassNew: '',
                 emailNew: '',
                 rolesNew: [],
-                userNew:null,
-                roles:[],
-                userToDelete:null,
+                userNew: null,
+                roles: [],
+                userToDelete: null,
+                imageRule:[
+                    value => !value || value.size < 100000 || 'Avatar debe ser menor de 100 Kb!'
+                ],
                 fullnameRules: [
                     fullname => !!fullname || "El nombre es requerido",
                     fullname => fullname.length > 8 || "El nombre debe tener al menos 8 caracteres"
@@ -438,8 +493,8 @@
                     email => !!email || "El correo es requerido",
                     email => /.@+./.test(email) || "El correo no es valido"
                 ],
-                dateBirthRules:[
-                    date=>!!date||"La fecha es requerida"
+                dateBirthRules: [
+                    date => !!date || "La fecha es requerida"
                 ],
                 menuDatePicker: false,
                 menuDatePickerEdit: false,
@@ -448,87 +503,88 @@
                 showAlert: false,
                 infoAlert: '',
                 fullnameEdit: '',
-                dobEdit:'',
-                sexEdit:'',
-                emailEdit:'',
-                rolesEdit:[],
-                formEditIsValid:true,
-                userToEdit:[],
-                showSnackNotification:false,
-                snackAlertType:'',
-                snackInfo:'',
-                iconSnack:''
+                dobEdit: '',
+                sexEdit: '',
+                emailEdit: '',
+                rolesEdit: [],
+                formEditIsValid: true,
+                userToEdit: [],
+                showSnackNotification: false,
+                snackAlertType: '',
+                snackInfo: '',
+                iconSnack: '',
+                file: null
             }
         },
         computed: {
-            ...mapGetters(['loading','loadingTable','user']),
+            ...mapGetters(['loading', 'loadingTable', 'user']),
 
         },
         methods: {
-                cargarDatosTabla() {
-                    this.$store.commit('setLoadingTable', true);
-                    const token = localStorage.getItem('token');
-                    axios.get(URL_FETCH_ALL_USERS, {
-                        headers: {
-                            "Authorization": "Bearer " + token,
-                            "cache-control": "no-cache",
-                        }
-                    }).then(({data}) => {
+            cargarDatosTabla() {
+                this.$store.commit('setLoadingTable', true);
+                const token = localStorage.getItem('token');
+                axios.get(URL_FETCH_ALL_USERS, {
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "cache-control": "no-cache",
+                    }
+                }).then(({data}) => {
 
-                    let pos=0;
-                    let found=false;
-                    while (pos<data.length&&!found){
-                        if(data[pos].username===this.user.username){
-                            found=true;
-                        }else{
+                    let pos = 0;
+                    let found = false;
+                    while (pos < data.length && !found) {
+                        if (data[pos].username === this.user.username) {
+                            found = true;
+                        } else {
                             pos++;
                         }
                     }
-                    const userDrop = data.splice(pos,1);
+                    const userDrop = data.splice(pos, 1);
                     console.log(userDrop);
-                    this.users=data;
+                    this.users = data;
                     console.log(data);
                     this.$store.commit('setLoadingTable', false);
-                    this.showSnackNotification=true;
-                    this.snackAlertType="success";
-                    this.snackInfo="Se han cargado los datos de los usuarios con exito";
-                    this.iconSnack="info_outline";
-                    this.search='';
+                    this.showSnackNotification = true;
+                    this.snackAlertType = "success";
+                    this.snackInfo = "Se han cargado los datos de los usuarios con exito";
+                    this.iconSnack = "info_outline";
+                    this.search = '';
                 }).catch((err) => {
                     this.$store.commit('setLoadingTable', false)
                     console.log(err)
-                    if(err.response.status===403){
+                    if (err.response.status === 403) {
                         this.$router.push("/403");
                     }
                 })
             },
-            dialogOpenDelete(item){
-                this.dialogDelete=true;
+            dialogOpenDelete(item) {
+                this.dialogDelete = true;
                 this.userToDelete = item;
             },
             deleteItem() {
                 const token = localStorage.getItem('token')
                 let deletedELement = null;
-                axios.post(URL_DELETE_USER,this.userToDelete,{
+                axios.post(URL_DELETE_USER, this.userToDelete, {
                     headers: {
                         "Authorization": "Bearer " + token,
                         "cache-control": "no-cache",
                     }
-                }).then(({data})=>{
+                }).then(({data}) => {
                     console.log(data)
                     let pos = this.users.indexOf(this.userToDelete);
-                    deletedELement = this.users.splice(pos,1);
-                    this.userToDelete=null;
-                    this.dialogDelete=false;
-                    this.showSnackNotification=true;
-                    this.snackAlertType="success";
-                    this.snackInfo="Se ha eliminado el usuario con exito";
-                    this.iconSnack="info_outline"
-                }).catch((err)=>{
+                    deletedELement = this.users.splice(pos, 1);
+                    this.userToDelete = null;
+                    this.dialogDelete = false;
+                    this.showSnackNotification = true;
+                    this.snackAlertType = "success";
+                    this.snackInfo = "Se ha eliminado el usuario con exito";
+                    this.iconSnack = "info_outline"
+                }).catch((err) => {
                     console.log(err);
                     this.users.push(deletedELement);
-                    this.userToDelete=null;
-                    if(err.response.status===403){
+                    this.userToDelete = null;
+                    if (err.response.status === 403) {
                         this.$router.push("/403");
                     }
                 })
@@ -553,8 +609,8 @@
                 if (item.status === 'A') return 'Activo'
                 else if (item.status === 'B') return 'Bloqueado'
             },
-            backStepperUser(){
-              this.stepperAddUser=this.stepperAddUser-1;
+            backStepperUser() {
+                this.stepperAddUser = this.stepperAddUser - 1;
             },
             continueInNewUser() {
                 if (this.$refs.formNewUserAccount.validate()) {
@@ -572,8 +628,8 @@
                             this.usernameNew = '';
                         }).catch((err) => {
                             this.stepperAddUser = 2
-                            this.showAlert=false;
-                            if(err.response.status===403){
+                            this.showAlert = false;
+                            if (err.response.status === 403) {
                                 this.$router.push("/403");
                             }
                         })
@@ -586,91 +642,102 @@
                     }
                 }
             },
-            cargarRoles(){
+            cargarRoles() {
                 const token = localStorage.getItem('token');
-                axios.get(URL_FETCH_ALL_ROLES,{
+                axios.get(URL_FETCH_ALL_ROLES, {
                     headers: {
                         "Authorization": "Bearer " + token,
                         "cache-control": "no-cache",
                     }
-                }).then(({data})=>{
+                }).then(({data}) => {
                     this.roles = data;
                     console.log(data)
-                }).catch(err=> {
+                }).catch(err => {
                     console.log(err)
-                    if(err.response.status===403){
+                    if (err.response.status === 403) {
                         this.$router.push("/403");
                     }
                 });
             },
-            cancelarButtonDialogInsertUser(){
-                this.dialogInsertUser=false;
-                this.confirmPassNew='';
-                this.usernameNew='';
-                this.passwordNew='';
-                this.birthDateNew='';
-                this.rolesNew=[];
-                this.emailNew='';
-                this.fullnameNew='';
-                this.genderNew='';
-                this.showAlert=false;
-                this.stepperAddUser=1;
+            cancelarButtonDialogInsertUser() {
+                this.dialogInsertUser = false;
+                this.confirmPassNew = '';
+                this.usernameNew = '';
+                this.passwordNew = '';
+                this.birthDateNew = '';
+                this.rolesNew = [];
+                this.emailNew = '';
+                this.fullnameNew = '';
+                this.genderNew = '';
+                this.showAlert = false;
+                this.stepperAddUser = 1;
+                this.file=null;
             },
-            siguienteRolesDialogInsertUser(){
-                if(this.rolesNew.length>0){
-                    this.stepperAddUser=3;
-                    this.showAlert=false;
-                }else{
+            siguienteRolesDialogInsertUser() {
+                if (this.rolesNew.length > 0) {
+                    this.stepperAddUser = 3;
+                    this.showAlert = false;
+                } else {
                     this.typeAlert = 'error';
                     this.showAlert = true;
                     this.infoAlert = "Debe seleccionar algún rol para el usuario";
                 }
             },
-            saveUser(){
-                const userNew={
-                    dob: this.birthDateNew,
-                    email: this.emailNew,
-                    fullname: this.fullnameNew,
-                    gender: this.genderNew,
-                    lang: "es",
-                    password: this.passwordNew,
-                    roles:this.rolesNew,
-                    username: this.usernameNew,
-                    status:'A'
-                }
-                this.$store.dispatch('saveUser',userNew).then(()=>{
-                    console.log("exito");
-                    this.dialogInsertUser=false;
-                    this.confirmPassNew='';
-                    this.usernameNew='';
-                    this.passwordNew='';
-                    this.birthDateNew='';
-                    this.rolesNew=[];
-                    this.emailNew='';
-                    this.fullnameNew='';
-                    this.genderNew='';
-                    this.showAlert=false;
-                    this.stepperAddUser=1;
-                    this.users.push(userNew);
-                    this.showSnackNotification=true;
-                    this.snackAlertType="success";
-                    this.snackInfo="Se ha insertado el usuario exitosamente";
-                    this.iconSnack="info_outline"
+            saveUser() {
+                console.log(this.file)
+                const token = localStorage.getItem('token');
+                let formData = new FormData();
+                formData.append('file', this.file)
+
+                this.$store.commit('setLoading', true)
+                axios.post(URL_POST_USER_IMG, formData, {
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "cache-control": "no-cache",
+                        "Content-Type": "multipart/form-data",
+                    },
+                }).then(({data})=>{
+                    const dataUri=data.fileDownloadUri;
+                    const userNew = {
+                        dob: this.birthDateNew,
+                        email: this.emailNew,
+                        fullname: this.fullnameNew,
+                        gender: this.genderNew,
+                        lang: "es",
+                        password: this.passwordNew,
+                        roles: this.rolesNew,
+                        username: this.usernameNew,
+                        status: 'A',
+                        image_url:dataUri
+                    };
+                    axios.post(URL_SAVE_USER,userNew,{
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "cache-control": "no-cache",
+                        },
+                    }).then(({data})=>{
+                        this.cargarDatosTabla();
+                        console.log(data);
+                        this.$store.commit('setLoading',false);
+                        this.$refs.formNewUserAccount.reset();
+                        this.dialogInsertUser=false
+                    }).catch(err=>{
+                        console.log(err)
+                        this.$store.commit('setLoading',false);
+                        this.$refs.formNewUserAccount.reset();
+                    })
+                }).catch(err=>{
+                    console.log(err);
+                    this.$store.commit('setLoading', false)
+
                 })
-                .catch(err=>{
-                    this.typeAlert = 'error';
-                    this.showAlert = true;
-                    this.infoAlert = err;
-                    console.log(err)
-                    let pos = this.users.indexOf(userNew);
-                    this.users.splice(pos,1);
-                    if(err.response.status===403){
-                        this.$router.push("/403");
-                    }
-                })
+
+
+
+
             },
-            editDataOfUser(){
-                if(this.$refs.formEditData.validate()) {
+            editDataOfUser() {
+                if (this.$refs.formEditData.validate()) {
                     const editedUser =
                         {
                             dob: this.dobEdit,
@@ -712,7 +779,7 @@
                             this.snackAlertType = "error";
                             this.snackInfo = "err";
                             this.iconSnack = "error_outline";
-                            if(err.response.status===403){
+                            if (err.response.status === 403) {
                                 this.$router.push("/403");
                             }
                         })
@@ -724,9 +791,9 @@
             this.cargarDatosTabla();
             this.cargarRoles();
         },
-        watch:{
-            rolesNew(value){
-                if(value){
+        watch: {
+            rolesNew(value) {
+                if (value) {
                     console.log(value)
                 }
             }

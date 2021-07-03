@@ -25,7 +25,7 @@
                                 </v-btn>
                                 <v-dialog v-model="dialogInsertarCarrera" max-width="450px" persistent>
                                     <template v-slot:activator="{on,attrs}">
-                                        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+                                        <v-btn color="primary" dark class="mb-2" @click="getFacultyList" v-bind="attrs" v-on="on">
                                             <v-icon dark left>add</v-icon>
                                             Nueva Carrera
                                         </v-btn>
@@ -297,10 +297,14 @@
             },
             editCarrera() {
                 const token = localStorage.getItem('token');
-                this.carreraToEdit.facultad.facultad=this.facultadEditCareer;
-                this.carreraToEdit.nombre=this.nameEditCareer;
-                this.carreraToEdit.siglas=this.siglasEditCareer;
-                axios.post(URL_UPDATE_CAREER,this.carreraToEdit,{
+                const carrera={
+                    facultad:{
+                        facultad:this.facultadEditCareer
+                    },
+                    nombre:this.nameEditCareer,
+                    siglas:this.siglasEditCareer
+                }
+                axios.post(URL_UPDATE_CAREER,carrera,{
                     headers: {
                         "Authorization": "Bearer " + token,
                         "cache-control": "no-cache",

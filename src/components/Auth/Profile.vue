@@ -3,7 +3,7 @@
         <v-layout row>
             <v-col cols="8">
                 <v-card elevation="20" shaped outlined>
-                    <v-img height="250" src="http://localhost:9000/img/731" alt="Some image is here"></v-img>
+                    <v-img class="text-center" contain height="400" :src="user.image_url" alt="Some image is here"></v-img>
                     <v-card-title>{{user.fullname}}</v-card-title>
                     <v-card-text>
                         <h3>Usuario: {{user.username}}</h3>
